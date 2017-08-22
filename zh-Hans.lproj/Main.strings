@@ -1,0 +1,177 @@
+
+/* Class = "UILabel"; text = "点我选择..."; ObjectID = "2sX-HW-AN4"; */
+"2sX-HW-AN4.text" = "点我选择...";
+
+/* Class = "UITabBarItem"; title = "搜索"; ObjectID = "4hn-O6-CjJ"; */
+"4hn-O6-CjJ.title" = "搜索";
+
+/* Class = "UILabel"; text = "|"; ObjectID = "5Ts-EU-S4c"; */
+"5Ts-EU-S4c.text" = "|";
+
+/* Class = "UIButton"; normalTitle = "dewormBtn"; ObjectID = "676-me-QAJ"; */
+"676-me-QAJ.normalTitle" = "dewormBtn";
+
+/* Class = "UIButton"; normalTitle = "小型"; ObjectID = "79M-F6-3hQ"; */
+"79M-F6-3hQ.normalTitle" = "小型";
+
+/* Class = "UIButton"; normalTitle = "大型"; ObjectID = "8mf-Fp-SUK"; */
+"8mf-Fp-SUK.normalTitle" = "大型";
+
+/* Class = "UILabel"; text = "菜鸡一只,希望能和大家交流学习"; ObjectID = "9Fb-op-cJo"; */
+"9Fb-op-cJo.text" = "菜鸡一只,希望能和大家交流学习";
+
+/* Class = "UIButton"; normalTitle = "幼年"; ObjectID = "9s6-RY-pa8"; */
+"9s6-RY-pa8.normalTitle" = "幼年";
+
+/* Class = "UIButton"; normalTitle = "其他"; ObjectID = "A6b-xc-6Vp"; */
+"A6b-xc-6Vp.normalTitle" = "其他";
+
+/* Class = "UITextField"; placeholder = "重复密码"; ObjectID = "ANd-SR-emN"; */
+"ANd-SR-emN.placeholder" = "重复密码";
+
+/* Class = "UIButton"; normalTitle = "成年"; ObjectID = "C2I-Nf-w1H"; */
+"C2I-Nf-w1H.normalTitle" = "成年";
+
+/* Class = "UIButton"; normalTitle = "注册"; ObjectID = "CDH-gP-nNU"; */
+"CDH-gP-nNU.normalTitle" = "注册";
+
+/* Class = "UIButton"; normalTitle = "棕"; ObjectID = "Dwb-JP-T5I"; */
+"Dwb-JP-T5I.normalTitle" = "棕";
+
+/* Class = "UITextField"; placeholder = "请输入密码"; ObjectID = "ETU-2Y-Lu3"; */
+"ETU-2Y-Lu3.placeholder" = "请输入密码";
+
+/* Class = "UIButton"; normalTitle = "Reset"; ObjectID = "Eft-fB-2JC"; */
+"Eft-fB-2JC.normalTitle" = "Reset";
+
+/* Class = "UIButton"; normalTitle = "公"; ObjectID = "EqG-Gw-aVY"; */
+"EqG-Gw-aVY.normalTitle" = "公";
+
+/* Class = "UILabel"; text = "菜鸡一只,希望能和大家交流学习"; ObjectID = "GL1-VR-Gol"; */
+"GL1-VR-Gol.text" = "菜鸡一只,希望能和大家交流学习";
+
+/* Class = "UILabel"; text = "genderLbl"; ObjectID = "HKF-Eb-sxZ"; */
+"HKF-Eb-sxZ.text" = "genderLbl";
+
+/* Class = "UIButton"; normalTitle = "迷你"; ObjectID = "HKt-tN-qhh"; */
+"HKt-tN-qhh.normalTitle" = "迷你";
+
+/* Class = "UILabel"; text = " iOS develop @ 稀土 掘金"; ObjectID = "Hjw-HN-KCl"; */
+"Hjw-HN-KCl.text" = " iOS develop @ 稀土 掘金";
+
+/* Class = "UITextField"; placeholder = "设置密码"; ObjectID = "IFi-xr-B9b"; */
+"IFi-xr-B9b.placeholder" = "设置密码";
+
+/* Class = "UILabel"; text = "ownernamelbl"; ObjectID = "J6B-7x-UDW"; */
+"J6B-7x-UDW.text" = "ownernamelbl";
+
+/* Class = "UIButton"; normalTitle = "中型"; ObjectID = "KQe-QU-w2u"; */
+"KQe-QU-w2u.normalTitle" = "中型";
+
+/* Class = "UILabel"; text = "年龄"; ObjectID = "Ket-wZ-mqY"; */
+"Ket-wZ-mqY.text" = "年龄";
+
+/* Class = "UITextField"; placeholder = "请输入用户名"; ObjectID = "MEY-nI-lWA"; */
+"MEY-nI-lWA.placeholder" = "请输入用户名";
+
+/* Class = "UIButton"; normalTitle = "白"; ObjectID = "MPV-MO-AeL"; */
+"MPV-MO-AeL.normalTitle" = "白";
+
+/* Class = "UILabel"; text = "点我选择..."; ObjectID = "MWh-Ji-ND7"; */
+"MWh-Ji-ND7.text" = "点我选择...";
+
+/* Class = "UIButton"; normalTitle = "shotBtn"; ObjectID = "OE7-j2-I9g"; */
+"OE7-j2-I9g.normalTitle" = "shotBtn";
+
+/* Class = "UIButton"; normalTitle = "花"; ObjectID = "PME-PA-F3b"; */
+"PME-PA-F3b.normalTitle" = "花";
+
+/* Class = "UIButton"; normalTitle = "neuterBtn"; ObjectID = "RHb-Fe-Fil"; */
+"RHb-Fe-Fil.normalTitle" = "neuterBtn";
+
+/* Class = "UIButton"; normalTitle = "老年"; ObjectID = "UOC-E5-nQo"; */
+"UOC-E5-nQo.normalTitle" = "老年";
+
+/* Class = "UILabel"; text = "品种"; ObjectID = "Y4J-20-NjW"; */
+"Y4J-20-NjW.text" = "品种";
+
+/* Class = "UIButton"; normalTitle = "黑"; ObjectID = "Y4Q-c7-hNo"; */
+"Y4Q-c7-hNo.normalTitle" = "黑";
+
+/* Class = "UILabel"; text = "|"; ObjectID = "Zc5-Ze-6tc"; */
+"Zc5-Ze-6tc.text" = "|";
+
+/* Class = "UILabel"; text = "性别"; ObjectID = "Zlu-fO-jyi"; */
+"Zlu-fO-jyi.text" = "性别";
+
+/* Class = "UILabel"; text = "颜色"; ObjectID = "cBN-tC-uuw"; */
+"cBN-tC-uuw.text" = "颜色";
+
+/* Class = "UILabel"; text = "petnameLbl"; ObjectID = "csc-Dx-pUe"; */
+"csc-Dx-pUe.text" = "petnameLbl";
+
+/* Class = "UIButton"; normalTitle = "breedBtn"; ObjectID = "dkT-6n-KYN"; */
+"dkT-6n-KYN.normalTitle" = "breedBtn";
+
+/* Class = "UILabel"; text = "ageLbl"; ObjectID = "e4C-yW-ddg"; */
+"e4C-yW-ddg.text" = "ageLbl";
+
+/* Class = "UIButton"; normalTitle = "登录"; ObjectID = "enZ-hO-GBB"; */
+"enZ-hO-GBB.normalTitle" = "登录";
+
+/* Class = "UILabel"; text = "|"; ObjectID = "fiJ-9D-3Kp"; */
+"fiJ-9D-3Kp.text" = "|";
+
+/* Class = "UIButton"; normalTitle = "注册"; ObjectID = "gxC-Op-cHW"; */
+"gxC-Op-cHW.normalTitle" = "注册";
+
+/* Class = "UITextField"; placeholder = "请输入邮箱"; ObjectID = "ia7-xX-KNc"; */
+"ia7-xX-KNc.placeholder" = "请输入邮箱";
+
+/* Class = "UIBarButtonItem"; title = "筛选"; ObjectID = "ip2-6i-dWk"; */
+"ip2-6i-dWk.title" = "筛选";
+
+/* Class = "UITabBarItem"; title = "发布"; ObjectID = "jP8-GM-gfD"; */
+"jP8-GM-gfD.title" = "发布";
+
+/* Class = "UILabel"; text = "sizeLbl"; ObjectID = "jwQ-CM-e8j"; */
+"jwQ-CM-e8j.text" = "sizeLbl";
+
+/* Class = "UITextField"; placeholder = "用户名"; ObjectID = "laP-Ac-gdE"; */
+"laP-Ac-gdE.placeholder" = "用户名";
+
+/* Class = "UILabel"; text = "typeLbl"; ObjectID = "lxb-vw-csv"; */
+"lxb-vw-csv.text" = "typeLbl";
+
+/* Class = "UILabel"; text = " iOS develop @ 稀土 掘金"; ObjectID = "mll-A4-3FA"; */
+"mll-A4-3FA.text" = " iOS develop @ 稀土 掘金";
+
+/* Class = "UITabBarItem"; title = "我的"; ObjectID = "rsz-eI-B9l"; */
+"rsz-eI-B9l.title" = "我的";
+
+/* Class = "UITextField"; placeholder = "邮箱"; ObjectID = "s39-tI-mfe"; */
+"s39-tI-mfe.placeholder" = "邮箱";
+
+/* Class = "UILabel"; text = "locationLbl"; ObjectID = "scY-eP-WIZ"; */
+"scY-eP-WIZ.text" = "locationLbl";
+
+/* Class = "UILabel"; text = "地区"; ObjectID = "u5b-qi-vE9"; */
+"u5b-qi-vE9.text" = "地区";
+
+/* Class = "UILabel"; text = "轩辕小羽"; ObjectID = "uex-pJ-DHn"; */
+"uex-pJ-DHn.text" = "轩辕小羽";
+
+/* Class = "UIButton"; normalTitle = "忘记密码"; ObjectID = "vpN-FK-xxl"; */
+"vpN-FK-xxl.normalTitle" = "忘记密码";
+
+/* Class = "UILabel"; text = "轩辕小羽"; ObjectID = "x48-K3-xrg"; */
+"x48-K3-xrg.text" = "轩辕小羽";
+
+/* Class = "UIButton"; normalTitle = "母"; ObjectID = "y1t-hY-MyL"; */
+"y1t-hY-MyL.normalTitle" = "母";
+
+/* Class = "UIButton"; normalTitle = "黄"; ObjectID = "yBx-aY-fBY"; */
+"yBx-aY-fBY.normalTitle" = "黄";
+
+/* Class = "UILabel"; text = "体型"; ObjectID = "z6Z-Fs-Opf"; */
+"z6Z-Fs-Opf.text" = "体型";

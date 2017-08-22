@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>breed</key>
+		<array>
+			<string>串串</string>
+			<string>中华田园犬</string>
+			<string>金毛</string>
+			<string>秋田犬</string>
+			<string>阿拉斯加雪撬犬</string>
+			<string>米格鲁</string>
+			<string>比熊</string>
+			<string>泰迪</string>
+			<string>吉娃娃</string>
+			<string>沙皮</string>
+			<string>松狮</string>
+			<string>雪纳瑞</string>
+			<string>蝴蝶犬</string>
+			<string>京巴</string>
+			<string>博美</string>
+			<string>萨摩耶</string>
+		</array>
+		<key>specie</key>
+		<string>狗</string>
+	</dict>
+	<dict>
+		<key>breed</key>
+		<array>
+			<string>波斯猫</string>
+		</array>
+		<key>specie</key>
+		<string>猫</string>
+	</dict>
+</array>
+</plist>
