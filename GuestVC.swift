@@ -52,8 +52,8 @@ class GuestVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuV
         //self.navigationController?.navigationBar.subviews.first?.alpha = 0
         //hiddenNav(true)
         
-        (self.tabBarController as! TabBarVC).postBtn.isHidden = self.hidesBottomBarWhenPushed
-        (self.tabBarController as! TabBarVC).view.bringSubview(toFront: (self.tabBarController as! TabBarVC).postBtn)
+       // (self.tabBarController as! TabBarVC).postBtn.isHidden = self.hidesBottomBarWhenPushed
+       // (self.tabBarController as! TabBarVC).view.bringSubview(toFront: (self.tabBarController as! TabBarVC).postBtn)
         
         self.navigationController?.navigationBar.subviews.first?.alpha = CGFloat(viewAppearAlpa)
         hiddenNav(hideNav)

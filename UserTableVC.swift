@@ -30,7 +30,7 @@ class UserTableVC: UITableViewController {
     var dateArray = [Date?]()
     var petIDArray = [String]()
     var ownerArray = [String]()
-    var dataSequence = [String]()
+    var adoptedArray = [Bool]()
 
 
     var collectArray = [String]()
@@ -132,6 +132,7 @@ class UserTableVC: UITableViewController {
 
     }
     
+    /*
     // swipe cell for actions
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
@@ -299,6 +300,8 @@ class UserTableVC: UITableViewController {
         
     }
     
+    */
+    
     // load posts
     func loadPosts() {
         JJHUD.showLoading(text: "正在加载")
@@ -373,7 +376,7 @@ class UserTableVC: UITableViewController {
                 self.petavaArray.removeAll(keepingCapacity: false)
                 self.petIDArray.removeAll(keepingCapacity: false)
                 self.ownerArray.removeAll(keepingCapacity: false)
-            
+                self.adoptedArray.removeAll(keepingCapacity: false)
                 
                 //match result == 0 , print nothing found
                 if objects?.count == 0 || objects == nil {
@@ -408,6 +411,7 @@ class UserTableVC: UITableViewController {
 
                     for object in sortedoObjects! {
                         self.petIDArray.append(object.objectId!)
+                        self.adoptedArray.append(object.value(forKey: "adopted") as! Bool)
                         self.petnameArray.append(object.value(forKey: "petname") as! String)
                         self.petavaArray.append(object.value(forKey: "petava") as! PFFile)
                         self.ageArray.append(object.value(forKey: "age") as! String)
@@ -461,6 +465,9 @@ class UserTableVC: UITableViewController {
         // define cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PostCell
         
+        cell.redCicle.isHidden = !adoptedArray[indexPath.row]
+        cell.redLbl.isHidden = !adoptedArray[indexPath.row]
+        
         cell.sizeLbl.text = self.sizeArray[indexPath.row]
         cell.genderLbl.text = self.genderArray[indexPath.row]
         cell.petnameLbl.text = self.petnameArray[indexPath.row]
@@ -506,11 +513,9 @@ class UserTableVC: UITableViewController {
             cell.dateLbl.text = "\(difference.year ?? 0)年前"
         }
         
-   
         if PFUser.current() != nil {
             
             // record do current user like the pet or do not if current user is not null
-            
             let likeQuery = PFQuery(className: "Like")
             likeQuery.whereKey("userId", equalTo: PFUser.current()!.objectId!)
             likeQuery.whereKey("petId", equalTo: cell.idLbl.text!)
@@ -522,8 +527,6 @@ class UserTableVC: UITableViewController {
                     } else {
                         cell.likeBtn.isSelected = true
 
-                     
-                        
                     }
                 }
             }
@@ -599,18 +602,16 @@ class UserTableVC: UITableViewController {
     
     func footerRefresh() {
 
-        
         if page <= petIDArray.count {
             page = page + 10
             loadPets(.endFooter)
         } else {
             self.refreshFooter?.endRefreshing()
-            
         }
-        
     }
 
-    
+    /*
+     
     //if current is nil(not logged in), user cannot edit the row
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if PFUser.current() != nil {
@@ -619,6 +620,7 @@ class UserTableVC: UITableViewController {
             return false
         }
     }
+ */
     
     
     func endRefreshByType(_ type: type){

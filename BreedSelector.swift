@@ -28,6 +28,10 @@ class BreedSelector: UITableViewController {
     var breeds: NSArray!
     var multipleChoice: Bool!
   
+    //slove the checkmark issue
+    var selectedCells = [NSIndexPath]()
+
+    
     init(_ multipleChoice: Bool){
         self.multipleChoice = multipleChoice
         super.init(nibName: nil, bundle: nil)
@@ -45,6 +49,13 @@ class BreedSelector: UITableViewController {
                 breeds = NSArray(contentsOfFile: path)
             }
         }
+        
+        self.tableView.tableFooterView = UIView()
+        self.navigationItem.title = "选择品种"
+        
+        //new back button
+        let backBtn = UIBarButtonItem(image: #imageLiteral(resourceName: "back"), style: .plain, target: self, action: #selector(back))
+        self.navigationItem.leftBarButtonItem = backBtn
     }
     
     // MARK: - Table view data source
@@ -52,41 +63,44 @@ class BreedSelector: UITableViewController {
         return breeds.count
     }
     
+    func back(){
+        _ = self.navigationController?.popViewController(animated: true)
+        
+    }
+    
     //cell config
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         var cell: UITableViewCell! = tableView.dequeueReusableCell(withIdentifier: "breedCell")
-        
+
         if cell == nil {
             cell = UITableViewCell(style: .default, reuseIdentifier: "breedCell")
         }
-        
+
         switch breedType {
       
             case .specie:
                 cell.textLabel?.text = (self.breeds[indexPath.row] as! NSDictionary)["specie"] as? String
-            
+
             case .breed:
-                
-                
+                    
                 cell.textLabel?.text = self.breeds[indexPath.row] as? String
-                
+                cell.selectionStyle = .none
+
 
                 if multipleChoice == true {
-                
-                    //new back button
-                    let saveBtn = UIBarButtonItem(title: "保存", style: .plain, target: self, action:#selector(save))
-                    
-                    self.navigationItem.rightBarButtonItem = saveBtn
-            
                     //breed 可以多选
                     self.tableView!.allowsMultipleSelection = true
-                    //选中时，cell尾部打对勾
-                    if tableView.indexPathsForSelectedRows?.index(of: indexPath) != nil{
-                        cell.accessoryType = .checkmark
-                    }
+                
+                    //save button
+                    let saveBtn = UIBarButtonItem(title: "保存", style: .plain, target: self, action:#selector(save))
+                    self.navigationItem.rightBarButtonItem = saveBtn
+                    
+                    cell.accessoryType = selectedCells.contains(indexPath as NSIndexPath) ? .checkmark : .none
+                    
                 }
             
+
         }
         
         return cell
@@ -97,13 +111,13 @@ class BreedSelector: UITableViewController {
     func save(){
         var selectedBreeds = [String]()
 
-        
         //存储选中单元格的内容
         if let selectedItems = tableView.indexPathsForSelectedRows {
             for indexPath in selectedItems {
                 
-                let currentBreed = tableView.cellForRow(at: indexPath)?.textLabel?.text
-                selectedBreeds.append("\(breedPath) \(currentBreed!)")
+                
+                let currentBreed = breeds[indexPath.row]
+                selectedBreeds.append("\(breedPath) \(currentBreed)")
             }
         }
 
@@ -123,24 +137,22 @@ class BreedSelector: UITableViewController {
             case .specie:
                 nextBreedSelector.breeds = (self.breeds[indexPath.row] as! NSDictionary)["breed"] as! NSArray
                 nextBreedSelector.breedType = .breed
+
             default:
                 nextBreedSelector.breeds = []
                 let cell = self.tableView?.cellForRow(at: indexPath)
                 
                 if multipleChoice == true {
+                    self.tableView?.cellForRow(at: indexPath)?.accessoryType = .checkmark
+                    selectedCells.append(indexPath as NSIndexPath)
 
-                    cell?.accessoryType = .checkmark
-                }
-                if multipleChoice == false {
+                } else if multipleChoice == false {
                     
                     var selectedBreeds = [String]()
                     
-                    
                     //存储选中单元格的内容
-                    
                     let currentBreed = cell!.textLabel?.text
                     selectedBreeds.append("\(breedPath) \(currentBreed!)")
-
                     
                     self.delegate?.breedSelected(selectedBreeds)
                 }
@@ -155,8 +167,9 @@ class BreedSelector: UITableViewController {
     
     //消选选中时, 去掉cell尾部对勾
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        
+
         self.tableView?.cellForRow(at: indexPath)?.accessoryType = .none
+        selectedCells = selectedCells.filter {$0 as IndexPath != indexPath}
         
     }
     

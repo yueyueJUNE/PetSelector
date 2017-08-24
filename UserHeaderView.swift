@@ -58,7 +58,6 @@ class UserHeaderView: UIView {
                                         self.button.setTitle("+ 关注", for: UIControlState.normal)
                                         self.button.layer.borderColor = UIColor.lightGray.cgColor
                                         self.button.setTitleColor(.lightGray, for: UIControlState())
-                                        
                                         self.followers.setTitle("\(Int(self.followers.title(for: UIControlState())!)! - 1)", for: .normal)
                                     } else {
                                         print(error!.localizedDescription)

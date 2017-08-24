@@ -13,6 +13,9 @@
 
 #import <ShareSDK/ShareSDK.h>
 #import <ShareSDKUI/ShareSDK+SSUI.h>
+#import <ShareSDKUI/SSUIShareActionSheetStyle.h>
+
+
 #import <ShareSDKConnector/ShareSDKConnector.h>
 #import "WeiboSDK.h"
 #import "WXApi.h"

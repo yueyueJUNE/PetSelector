@@ -27,8 +27,9 @@ class TabBarVC: UITabBarController {
         // disable translucent
         self.tabBar.isTranslucent = false
         //modalView = UIView()
-        postBtn = UIButton()
+       // postBtn = UIButton()
 
+        /*
         let WINDOW_HEIGHT = self.view.frame.height
         let TAB_HEIGHT = self.tabBar.frame.height
         let GRID_WIDTH = self.view.frame.width / 5
@@ -36,21 +37,23 @@ class TabBarVC: UITabBarController {
         let MARGIN_Y = CGFloat(5)
         let BTN_WIDTH = TAB_HEIGHT - MARGIN_X * 2
         let BTN_HEIGHT = TAB_HEIGHT - MARGIN_Y * 2
-        
+      */
       
        // modalView.frame = CGRect(x: GRID_WIDTH * 2, y: WINDOW_HEIGHT - TAB_HEIGHT, width: GRID_WIDTH, height: TAB_HEIGHT)
        // self.view.addSubview(modalView)
     
         
-        postBtn.frame = CGRect(x: GRID_WIDTH * 2 + (GRID_WIDTH - BTN_WIDTH) / 2, y: WINDOW_HEIGHT - TAB_HEIGHT + MARGIN_Y, width: BTN_WIDTH, height: BTN_HEIGHT)
-        postBtn.setBackgroundImage(#imageLiteral(resourceName: "post_btn"), for: UIControlState())
-         self.view.addSubview(postBtn)
+       // postBtn.frame = CGRect(x: GRID_WIDTH * 2 + (GRID_WIDTH - BTN_WIDTH) / 2, y: WINDOW_HEIGHT - TAB_HEIGHT + MARGIN_Y, width: BTN_WIDTH, height: BTN_HEIGHT)
+       // postBtn.setBackgroundImage(#imageLiteral(resourceName: "post_btn"), for: UIControlState())
+       //  self.view.addSubview(postBtn)
 
-        postBtn.addTarget(self, action: #selector(postButtonClicked), for: .touchUpInside)
+       // postBtn.addTarget(self, action: #selector(postButtonClicked), for: .touchUpInside)
         
        
  
 }
+    
+    /*
 
     func postButtonClicked(_ sender: UIButton) {
     
@@ -62,6 +65,7 @@ class TabBarVC: UITabBarController {
         
         //self.selectedIndex = 0
     }
+ */
     
 }
 

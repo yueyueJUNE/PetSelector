@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 var genderUpload = ""
 var ageUpload = ""
@@ -19,6 +20,7 @@ var neuterUpload: Bool?
 var dewormUpload: Bool?
 var shotUpload: Bool?
 var petnameUpload = ""
+
 
 class UploadVC: UIViewController {
 
@@ -49,12 +51,12 @@ class UploadVC: UIViewController {
     @IBOutlet weak var storyTxt: UITextView!
     //like textView
     @IBOutlet weak var likeTxt: UITextView!
-    
+    //contact textView
     @IBOutlet weak var contact: UITextView!
  
   
     let green = UIColor.init(red: 34/255.0, green: 158/255.0, blue: 55/255.0, alpha: 1)
-    
+        
     @IBAction func neuterBtn_click(_ sender: UIButton) {
         setDefaultButtonColors(neuterBtn)
         if sender.tag == 0 {
@@ -117,19 +119,39 @@ class UploadVC: UIViewController {
         setDefaultButtonColors(colorBtn)
         sender.setTitleColor(.black, for: UIControlState())
         sender.backgroundColor = .white
-        
     }
     
-            
+    
+    var fakeview: UIView?
+    
     override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isTranslucent = true
         
-        if UserDefaults.standard.string(forKey: "username") == nil {
-            let signIn = self.storyboard!.instantiateViewController(withIdentifier: "SignInVC") as! SignInVC
-            self.navigationController!.pushViewController(signIn, animated: false)
+        if PFUser.current() == nil {
             
+            fakeview = UIView()
+            fakeview?.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+            fakeview?.backgroundColor = .black
+            fakeview?.alpha = 0.3
+            self.view.addSubview(fakeview!)
+            
+            // tap to hide keyboard
+            let showAlert = UITapGestureRecognizer(target: self, action: #selector(showAlertSheet))
+            showAlert.numberOfTapsRequired = 1
+            fakeview?.isUserInteractionEnabled = true
+            fakeview?.addGestureRecognizer(showAlert)
         }
-        navigationController?.navigationBar.isTranslucent = false
-        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        fakeview?.removeFromSuperview()
+    }
+    
+    
+    func showAlertSheet() {
+       
+        JJHUD.showText(text: "请先登录", delay: 1)
+    
     }
     
     //update button color according to data from uploaded data
@@ -140,12 +162,8 @@ class UploadVC: UIViewController {
                 button.backgroundColor = .white
                 button.setTitleColor(.black, for: UIControlState())
             }
-            
         }
     }
-    
-    
-
     
     //save data chose into the server
     func saveButtonTitle(_ buttons: [UIButton]) -> String {
@@ -154,130 +172,89 @@ class UploadVC: UIViewController {
              if button.backgroundColor == .white {
                 data = button.title(for: UIControlState())!
             }
-            
         }
         return data
     }
     
-        
-        
-        override func viewDidLoad() {
-            super.viewDidLoad()
-
-            // tap to hide keyboard
-            let hideTap = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-            hideTap.numberOfTapsRequired = 1
-            self.view.isUserInteractionEnabled = true
-            self.view.addGestureRecognizer(hideTap)
-            
-           
-            
-            setDefaultButtonBorders(ageBtn)
-            setDefaultButtonBorders(genderBtn)
-            setDefaultButtonBorders(sizeBtn)
-            setDefaultButtonBorders(ageBtn)
-            setDefaultButtonBorders(colorBtn)
-            setDefaultButtonBorders(neuterBtn)
-            setDefaultButtonBorders(dewormBtn)
-            setDefaultButtonBorders(shotBtn)
-            
-            /*
-            setDefaultButtonColors(ageBtn)
-            setDefaultButtonColors(genderBtn)
-            setDefaultButtonColors(sizeBtn)
-            setDefaultButtonColors(ageBtn)
-            setDefaultButtonColors(colorBtn)
-            setDefaultButtonColors(neuterBtn)
-            setDefaultButtonColors(dewormBtn)
-            setDefaultButtonColors(shotBtn)
-            */
-            
-
-             /*
-          // for gender in genderFilter {
-            
-            setButtonColor(genderUpload, genderBtn)
-            setButtonColor(ageUpload, ageBtn)
-            setButtonColor(sizeUpload, sizeBtn)
-            setButtonColor(colorUpload, colorBtn)
-
- */
-            /*
-            
-                if genderUpload == "公" {
-             genderBtn[0].backgroundColor = .white
-             genderBtn[0].setTitleColor(.black, for: UIControlState())
-             }
-                if genderUpload == "母" {genderBtn[1].backgroundColor = .white
-             genderBtn[1].setTitleColor(.black, for: UIControlState())}
-            //}
-            
-            
-           // for age in ageFilter {
-                
-                if ageUpload == "幼年" {ageBtn[0].backgroundColor = .white}
-                if ageUpload == "成年" {ageBtn[1].backgroundColor = .white}
-                if ageUpload == "老年" {ageBtn[2].backgroundColor = .white}
-
-           // }
-            
-           // for size in sizeFilter {
-                if sizeUpload == "迷你" {sizeBtn[0].backgroundColor = .white}
-                if sizeUpload == "小型" {sizeBtn[1].backgroundColor = .white}
-                if sizeUpload == "中型" {sizeBtn[2].backgroundColor = .white}
-                if sizeUpload == "大型" {sizeBtn[3].backgroundColor = .white}
-                
-           // }
-            
-         
-           // for color in colorFilter {
-                if colorUpload == "黑" {colorBtn[0].backgroundColor = .white}
-                if colorUpload == "白" {colorBtn[1].backgroundColor = .white}
-                if colorUpload == "花" {colorBtn[2].backgroundColor = .white}
-                if colorUpload == "棕" {colorBtn[3].backgroundColor = .white}
-                if colorUpload == "黄" {colorBtn[4].backgroundColor = .white}
-                if colorUpload == "其他" {colorBtn[5].backgroundColor = .white}
-
-           // }
- 
-            */
-            
-            //判断是否选择地区和种类
-            /*
-        
-            storyTxt.text! = storyUpload
-            adavantageTxt.text! = adavantageUpload
-            */
-            //自定义导航按钮
-          
-            //  let leftBarBtn = UIBarButtonItem(title: "取消", style: .plain, target: self, action: #selector(back))
-          //  self.navigationItem.leftBarButtonItem = leftBarBtn
-            
-            let saveBtn = UIBarButtonItem(title: "下一步", style: .plain, target: self, action:#selector(nextStep))
-            self.navigationItem.rightBarButtonItem = saveBtn
-            
-            let backBtn = UIBarButtonItem(title: "取消", style: .plain, target: self, action:#selector(back))
-            self.navigationItem.leftBarButtonItem = backBtn
-            
-            // check notifications of keyboard - shown or not
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-            
-            NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-            
-           
-           // storyTxt.delegate = self
-            //likeTxt.delegate = self
- 
-   
-        }
     
     
-       func back() {
-            self.dismiss(animated: true, completion: nil)
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-        }
+        // tap to hide keyboard
+        let hideTap = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        hideTap.numberOfTapsRequired = 1
+        self.view.isUserInteractionEnabled = true
+        self.view.addGestureRecognizer(hideTap)
+                    
+        setDefaultButtonBorders(ageBtn)
+        setDefaultButtonBorders(genderBtn)
+        setDefaultButtonBorders(sizeBtn)
+        setDefaultButtonBorders(ageBtn)
+        setDefaultButtonBorders(colorBtn)
+        setDefaultButtonBorders(neuterBtn)
+        setDefaultButtonBorders(dewormBtn)
+        setDefaultButtonBorders(shotBtn)
+        
+        self.navigationItem.title = "填写资料"
+        
+        let saveBtn = UIBarButtonItem(title: "下一步", style: .plain, target: self, action:#selector(nextStep))
+        self.navigationItem.rightBarButtonItem = saveBtn
+        
+        // receive notification 发布成功
+        NotificationCenter.default.addObserver(self, selector: #selector(reload), name: NSNotification.Name(rawValue: "reset"), object: nil)
+        
+        // check notifications of keyboard - shown or not
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+       
+    }
+ 
+    
+    func reload() {
+        scrollView.setContentOffset(CGPoint(x: 0, y: -scrollView.contentInset.top), animated: true)
+        
+        
+        setDefaultButtonBorders(ageBtn)
+        setDefaultButtonBorders(genderBtn)
+        setDefaultButtonBorders(sizeBtn)
+        setDefaultButtonBorders(colorBtn)
+        setDefaultButtonBorders(neuterBtn)
+        setDefaultButtonBorders(dewormBtn)
+        setDefaultButtonBorders(shotBtn)
+        
+        setDefaultButtonColors(ageBtn)
+        setDefaultButtonColors(genderBtn)
+        setDefaultButtonColors(sizeBtn)
+        setDefaultButtonColors(colorBtn)
+        setDefaultButtonColors(neuterBtn)
+        setDefaultButtonColors(dewormBtn)
+        setDefaultButtonColors(shotBtn)
 
+        petName.text = ""
+        storyTxt.text = ""
+        likeTxt.text = ""
+        contact.text = ""
+        
+        
+        // switch to another ViewController at 0 index of tabbar
+        let app: AppDelegate? = (UIApplication.shared.delegate as? AppDelegate)
+        let controller: UIViewController? = app?.window?.rootViewController
+        let rvc: TabBarVC? = (controller as? TabBarVC)
+        rvc?.selectedIndex = 0
+        
+    }
+    
+    
+    
+    
         func nextStep(){
+            
+            if PFUser.current() == nil {
+                JJHUD.showText(text: "请先登录", delay: 1)
+                
+            } else {
             //clear the variables
             petnameUpload = ""
             genderUpload = ""
@@ -347,45 +324,38 @@ class UploadVC: UIViewController {
                 }
             }
             */
-     
       
             petnameUpload = petName.text!
             storyUpload = storyTxt.text!
             likeUpload = likeTxt.text!
-            storyUpload = contact.text!
-
-            
+            contactUpload = contact.text!
            
-            if petnameUpload == "" {alert("请填写","它的姓名")}
-            if genderUpload == "" {alert("请选择","性别")}
-            if ageUpload == "" {alert("请选择","年龄")}
-            if sizeUpload == "" {alert("请选择","体型")}
-            if colorUpload == "" {alert("请选择","颜色")}
-            if neuterUpload == nil {alert("请选择","绝育状况")}
-            if dewormUpload == nil {alert("请选择","驱虫状况")}
-            if shotUpload == nil {alert("请选择","疫苗状况")}
-            if contactUpload == "" {alert("请填写","联系方式")}
-            if storyUpload == "" {alert("请填写","它的故事")}
-            if likeUpload == "" {alert("请填写","它的喜好")}
-
+            if petnameUpload == "" {JJHUD.showText(text: "请填写宠物姓名", delay: 1.25, enable: false)}
+            else if genderUpload == "" {JJHUD.showText(text: "请选择性别", delay: 1.25, enable: false)}
+            else if ageUpload == "" {JJHUD.showText(text: "请选择年龄", delay: 1.25, enable: false)}
+            else if sizeUpload == "" {JJHUD.showText(text: "请选择体形", delay: 1.25, enable: false)}
+            else if colorUpload == "" {JJHUD.showText(text: "请选择颜色", delay: 1.25, enable: false)}
+            else if neuterUpload == nil {JJHUD.showText(text: "请选择绝育状况", delay: 1.25, enable: false)}
+            else if dewormUpload == nil {JJHUD.showText(text: "请选择驱虫状况", delay: 1.25, enable: false)}
+            else if shotUpload == nil {JJHUD.showText(text: "请选择疫苗状况", delay: 1.25, enable: false)}
+            else if contactUpload == "" {JJHUD.showText(text: "请填写联系方式", delay: 1.25, enable: false)}
+            else if storyUpload == "" {JJHUD.showText(text: "请填写它的故事", delay: 1.25, enable: false)}
+            else if likeUpload == "" {JJHUD.showText(text: "请填写它的喜好", delay: 1.25, enable: false)}
+            else {
+                self.view.endEditing(true)
+                let UploadPhotos = self.storyboard?.instantiateViewController(withIdentifier: "UploadPhotos") as! UploadPhotos
             
-            self.view.endEditing(true)
-            let UploadPhotos = self.storyboard?.instantiateViewController(withIdentifier: "UploadPhotos") as! UploadPhotos
-            
-            //隐藏tab bar
-            UploadPhotos.hidesBottomBarWhenPushed = true
-            
-            self.navigationController?.pushViewController(UploadPhotos, animated: true)
-
+                //隐藏tab bar
+                UploadPhotos.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(UploadPhotos, animated: true)
+            }
             // send notification to homeVC to be reloaded
             //NotificationCenter.default.post(name: Notification.Name(rawValue: "setFilter"), object: nil)
             
            // _ = self.navigationController?.popViewController(animated: true)
-            
-        
+        }
     }
-        
-        
+    
     func setDefaultButtonColors(_ buttons: [UIButton]){
         
         for button in buttons {
@@ -404,7 +374,7 @@ class UploadVC: UIViewController {
         }
         
     }
-
+/*
 
     func alert(_ titleMessage: String, _ alertMessage: String) {
         let alert = UIAlertController(title: titleMessage, message: alertMessage, preferredStyle: UIAlertControllerStyle.alert)
@@ -416,60 +386,15 @@ class UploadVC: UIViewController {
             self.presentedViewController?.dismiss(animated: false, completion: nil)
         }
     }
-    
+    */
     
     
     func hideKeyboard(){
         self.view.endEditing(true)
     }
     
-   
-    
-    /*
-    
-    var previusHeight: CGFloat!
-
-    var currentOffset:CGFloat!
-    
-    func textViewDidChange(_ textView: UITextView) {
-        
-        
-        if  textView.frame.size.height > 100 && textView.frame.size.height > previusHeight {
-            
-            // move up with animation
-            UIView.animate(withDuration: 0.4, animations: { () -> Void in
-                
-             
-                self.scrollView.contentOffset.y += 19
-                self.scrollView.contentInset = UIEdgeInsetsMake(0, 0, self.keyboard.height, 0);
-    
-            })
-
-
-            print(self.scrollView.contentSize.height)
-        } else if textView.frame.size.height > 100 && textView.frame.size.height < previusHeight {
-           
-            UIView.animate(withDuration: 0.4, animations: { () -> Void in
-                
-                self.scrollView.contentOffset.y -= 19
-
-                self.scrollView.contentInset = UIEdgeInsetsMake(0, 0, self.keyboard.height, 0);
-
-            })
-            
-        }
-        
-        previusHeight = textView.frame.size.height
-
- 
-
-    }
-    */
-    
-    
     
     // func when keyboard is shown
-    
    
     func keyboardWillShow(_ notification: NSNotification){
         

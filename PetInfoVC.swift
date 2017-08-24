@@ -24,7 +24,7 @@ class PetInfoVC: UITableViewController {
     var gender: String!
     var age: String!
     var size: String!
-    var shareImage = [UIImage]()
+    var shareImage: UIImage!
     
     var neuter: String?
     var shot: String?
@@ -41,11 +41,13 @@ class PetInfoVC: UITableViewController {
     var pageControl: UIPageControl!
     var photoGallery: UIScrollView?
     var backgroundscrollview : UIScrollView?
+    
+    let green = UIColor.init(red: 0/255.0, green: 153/255.0, blue: 102/255.0, alpha: 1)
 
     override func viewWillAppear(_ animated: Bool) {
         
-        (self.tabBarController as! TabBarVC).postBtn.isHidden = self.hidesBottomBarWhenPushed
-        (self.tabBarController as! TabBarVC).view.bringSubview(toFront: (self.tabBarController as! TabBarVC).postBtn)
+       // (self.tabBarController as! TabBarVC).postBtn.isHidden = self.hidesBottomBarWhenPushed
+       // (self.tabBarController as! TabBarVC).view.bringSubview(toFront: (self.tabBarController as! TabBarVC).postBtn)
     }
     
     override func viewDidLoad() {
@@ -200,11 +202,14 @@ class PetInfoVC: UITableViewController {
                 let shareParames = NSMutableDictionary()
                 shareParames.ssdkEnableUseClientShare()
                 
+                SSUIShareActionSheetStyle.setShareActionSheetStyle(ShareActionSheetStyle.simple)
+        
+                
                 shareParames.ssdkSetupShareParams(byText: "分享内容test",
                                                   images : self.shareImage,
                                                   url : NSURL(string:"http://mob.com") as URL!,
                                                   title : "分享标题hhh",
-                                                  type : SSDKContentType.webPage)
+                                                  type : SSDKContentType.app)
 
                 ShareSDK.showShareActionSheet(nil, items: nil, shareParams: shareParames, onShareStateChanged: { (state, type, userdata, entity, error, end) in
                     switch state{
@@ -372,8 +377,6 @@ class PetInfoVC: UITableViewController {
                                 print(error!.localizedDescription)
                             }
                         })
-                        
-                        
                     }
                 }
                 
@@ -456,9 +459,7 @@ class PetInfoVC: UITableViewController {
                 query.countObjectsInBackground { (count, error) in
                     
                     usercell.followercountLbl.text = "\(count)"
-                    
                 }
-            
             }
             
             
@@ -468,20 +469,17 @@ class PetInfoVC: UITableViewController {
                     usercell.followBtn.isHidden = true
                 } else {
                     usercell.followBtn.isHidden = false
+                    usercell.followBtn.setTitle(follow, for: UIControlState.normal)
                     
-                }
-                
-                usercell.followBtn.setTitle(follow, for: UIControlState.normal)
-                
-                if follow == "+ 关注" {
-                    usercell.followBtn.layer.borderColor = UIColor.orange.cgColor
-                    usercell.followBtn.setTitleColor(.orange, for: UIControlState())
-                    
-                    
-                } else if follow == "已关注" {
-                    usercell.followBtn.layer.borderColor = UIColor.lightGray.cgColor
-                    usercell.followBtn.setTitleColor(.lightGray, for: UIControlState())
-                    
+                    if follow == "+ 关注" {
+                        usercell.followBtn.layer.borderColor = green.cgColor
+                        usercell.followBtn.setTitleColor(green, for: UIControlState())
+                        
+                    } else if follow == "已关注" {
+                        usercell.followBtn.layer.borderColor = UIColor.lightGray.cgColor
+                        usercell.followBtn.setTitleColor(.lightGray, for: UIControlState())
+                        
+                    }
                 }
                 
             } else if PFUser.current() == nil {
@@ -560,7 +558,7 @@ class PetInfoVC: UITableViewController {
         backgrounfView.backgroundColor = .white
         line.backgroundColor = .lightGray
         
-        titleLabel.textColor = UIColor.orange
+        titleLabel.textColor = green
         titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
         titleLabel.backgroundColor = UIColor.white
         titleLabel.textAlignment = .center
@@ -610,7 +608,13 @@ class PetInfoVC: UITableViewController {
                 
                 //将照片ID存入array
                 self.photoIdArray = object!.value(forKey: "petphotos") as! [String]
-                print(self.photoIdArray.count)
+                (object!.value(forKey: "petava") as! PFFile).getDataInBackground(block: { (data, error) in
+                    if error == nil {
+                        self.shareImage = UIImage(data: data!)
+
+                    }
+                })
+
                 self.owner = object!.value(forKey: "owner") as? String
                 self.petname = object!.value(forKey: "petname") as! String
                 let str = object!.value(forKey: "breed") as! String
@@ -753,7 +757,6 @@ class PetInfoVC: UITableViewController {
                 if error == nil {
                     imageView.image = UIImage(data: data!)
                     backgroungView.image = UIImage(data: data!)
-                    self.shareImage.append(UIImage(data: data!)!)
 
                 }
             })

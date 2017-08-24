@@ -10,7 +10,7 @@ import UIKit
 import Parse
 
 
-class searchVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource {
+class searchVC: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
     
     // declare search bar
     var searchBar = UISearchBar()
@@ -32,6 +32,7 @@ class searchVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate,
     var dateArray = [Date?]()
     var petIDArray = [String]()
     var ownerArray = [String]()
+    var adoptedArray = [Bool]()
     
     let green = UIColor.init(red: 0/255.0, green: 153/255.0, blue: 102/255.0, alpha: 1)
 
@@ -53,7 +54,7 @@ class searchVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate,
     }
     */
     // collectionView UI
-    var collectionView : UICollectionView!
+   // var collectionView : UICollectionView!
     
     // collectionView arrays to hold infromation from server
     var picArray = [PFFile]()
@@ -65,8 +66,8 @@ class searchVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate,
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
-        (self.tabBarController as! TabBarVC).postBtn.isHidden = self.hidesBottomBarWhenPushed
-        (self.tabBarController as! TabBarVC).view.bringSubview(toFront: (self.tabBarController as! TabBarVC).postBtn)
+        //(self.tabBarController as! TabBarVC).postBtn.isHidden = self.hidesBottomBarWhenPushed
+       // (self.tabBarController as! TabBarVC).view.bringSubview(toFront: (self.tabBarController as! TabBarVC).postBtn)
 
     }
     
@@ -112,7 +113,7 @@ class searchVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate,
         //loadUsers("username", "")
         
         // call collectionView
-        collectionViewLaunch()
+        //1collectionViewLaunch()
         
         //setupHeader()
         //setupFooter()
@@ -366,7 +367,8 @@ class searchVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate,
                 self.petavaArray.removeAll(keepingCapacity: false)
                 self.petIDArray.removeAll(keepingCapacity: false)
                 self.ownerArray.removeAll(keepingCapacity: false)
-                
+                self.adoptedArray.removeAll(keepingCapacity: false)
+
                 
                 //match result == 0 , print nothing found
                 if objects?.count == 0 || objects == nil {
@@ -387,6 +389,7 @@ class searchVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate,
                     
                     for object in objects! {
                         self.petIDArray.append(object.objectId!)
+                        self.adoptedArray.append(object.value(forKey: "adopted") as! Bool)
                         self.petnameArray.append(object.value(forKey: "petname") as! String)
                         self.petavaArray.append(object.value(forKey: "petava") as! PFFile)
                         self.ageArray.append(object.value(forKey: "age") as! String)
@@ -436,7 +439,7 @@ class searchVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate,
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         
         // hide collectionView when started search
-        collectionView.isHidden = true
+       // collectionView.isHidden = true
         
         // show cancel button
         searchBar.showsCancelButton = true
@@ -447,7 +450,7 @@ class searchVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate,
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         
         // unhide collectionView when tapped cancel button
-        collectionView.isHidden = false
+        //collectionView.isHidden = false
         
         // dismiss keyboard
         searchBar.resignFirstResponder()
@@ -472,7 +475,6 @@ class searchVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate,
     
    
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-       // view.endEditing(true)
         // dismiss keyboard
         searchBar.resignFirstResponder()
 
@@ -550,8 +552,6 @@ class searchVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate,
                 
             }
             
-
-        
             // STEP 2. Hide follow button for current user
             if PFUser.current() == nil || cell.userIDLbl.text == PFUser.current()!.objectId! {
                 cell.followBtn.isHidden = true
@@ -592,6 +592,9 @@ class searchVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate,
             // define cell
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PostCell
             
+            cell.redLbl.isHidden = !adoptedArray[indexPath.row]
+            cell.redCicle.isHidden = !adoptedArray[indexPath.row]
+
             cell.ageLbl.text = ageArray[indexPath.row]
             let str = breedArray[indexPath.row]
             let index = str.index(str.startIndex, offsetBy: 1)
@@ -736,7 +739,7 @@ class searchVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate,
     }
     
     
-    
+    /*
     //if current is nil(not logged in), user cannot edit the row
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if PFUser.current() != nil && searchBar.selectedScopeButtonIndex == 1 {
@@ -914,8 +917,8 @@ class searchVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate,
         }
         
     }
-    
-    
+    */
+    /*
     // COLLECTION VIEW CODE
     func collectionViewLaunch() {
         
@@ -1027,7 +1030,7 @@ class searchVC: UIViewController, UISearchBarDelegate, UICollectionViewDelegate,
             }
         }
     }
-    
+    */
     /*
     // scrolled down
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {

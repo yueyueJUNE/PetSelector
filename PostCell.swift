@@ -24,6 +24,8 @@ class PostCell: UITableViewCell {
     @IBOutlet weak var likeBtn: DOFavoriteButton!
     @IBOutlet weak var likeLbl: UILabel!
     
+    @IBOutlet weak var redLbl: UILabel!
+    @IBOutlet weak var redCicle: UIImageView!
     
     
     func likeBtn_clicked(_ sender: DOFavoriteButton) {
@@ -122,6 +124,8 @@ class PostCell: UITableViewCell {
         
         idLbl.isHidden = true
         collectLbl.isHidden = true
+        redLbl.isHidden = true
+        redCicle.isHidden = true
         
         // round ava
         petavaImg.layer.cornerRadius = petavaImg.frame.size.width / 2
@@ -136,6 +140,5 @@ class PostCell: UITableViewCell {
         likeBtn.lineColor = UIColor(red: 226/255, green: 96/255, blue: 96/255, alpha: 1.0)
         likeBtn.addTarget(self, action: #selector(likeBtn_clicked), for: .touchUpInside)
     }
-
     
 }

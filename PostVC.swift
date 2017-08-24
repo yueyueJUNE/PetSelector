@@ -33,7 +33,6 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var dateArray = [Date?]()
     var petIDArray = [String]()
     var ownerIDArray = [String]()
-    //var collectDict: [String: Bool] = [:]
 
     var offset: CGPoint!
 
@@ -42,21 +41,6 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         case endFooter = 2
         case endLoading = 3
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        //self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.black]
-        //UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
-       // self.navigationController?.navigationBar.tintColor = .darkGray
-        
-        
-        (self.tabBarController as! TabBarVC).postBtn.isHidden = self.hidesBottomBarWhenPushed
-        (self.tabBarController as! TabBarVC).view.bringSubview(toFront: (self.tabBarController as! TabBarVC).postBtn)
-       
-
-        
-        //totalRowCount = 10
-    }
-    
     
     
     // default func
@@ -69,23 +53,6 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         self.tableView.tableFooterView = UIView()
         self.tableView.estimatedRowHeight = 99.5
         self.tableView.rowHeight=UITableViewAutomaticDimension
-       
-        
-        //refresher = UIRefreshControl()
-        // refresher.addTarget(self, action: #selector(refresh), for:UIControlEvents.valueChanged)
-        //tableView.addSubview(refresher)
-        
-        
-        // title at the top
-        //self.navigationItem.title = "FEED"
-        
-        // automatic row height - dynamic cell
-        // tableView.rowHeight = UITableViewAutomaticDimension
-        // tableView.estimatedRowHeight = 450
-        
-        // pull to refresh
-        //refresher.addTarget(self, action: #selector(loadPosts), for: UIControlEvents.valueChanged)
-        // tableView.addSubview(refresher)
         
         // receive notification from uploadPhoto if picture is liked, to update tableView
         NotificationCenter.default.addObserver(self, selector: #selector(uploadFail), name: Notification.Name(rawValue: "uploadFail"), object: nil)
@@ -94,12 +61,6 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         //上传 indicator
         NotificationCenter.default.addObserver(self, selector: #selector(beginActivityIndicator), name: Notification.Name(rawValue: "beginActivityIndicator"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(stopActivityIndicator), name: Notification.Name(rawValue: "stopActivityIndicator"), object: nil)
-        
-        // indicator's x(horizontal) center
-        //indicator.center.x = tableView.center.x
-        
-        
-        //self.navigationController?.navigationBar.isTranslucent = false
         
         
         // calling function to load posts
@@ -125,10 +86,10 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
     @IBAction func tapFllter(_ sender: Any) {
-        let filter = self.storyboard?.instantiateViewController(withIdentifier: "filter") as! navVC
+        let filter = self.storyboard?.instantiateViewController(withIdentifier: "filter")// as! navVC
         //filter.hidesBottomBarWhenPushed = true
         //self.navigationController?.pushViewController(filter, animated: true)
-        self.present(filter, animated: true, completion: nil)
+        self.present(filter!, animated: true, completion: nil)
     }
     
     func resetPage() {
@@ -559,7 +520,7 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
     }
     
-    
+    /*
     // swipe cell for actions
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
                 
@@ -733,6 +694,7 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    */
     
    func uploadSuccess() {
     
@@ -746,11 +708,5 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         JJHUD.showError(text: "上传失败", delay: 1.25)
     }
     
-    func back() {
-       // _ = self.navigationController!.popViewController(animated: true)
-        
-        if !petID.isEmpty {
-            petID.removeLast()
-        }
-    }
+ 
 }

@@ -20,15 +20,12 @@ class SignInVC: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         
-        if UserDefaults.standard.string(forKey: "username") != nil {
+        if UserDefaults.standard.string(forKey: "userID") != nil {
             
             NotificationCenter.default.post(name: Notification.Name(rawValue: "signIn"), object: nil)
             self.navigationController?.popViewController(animated: false)
             
         }
-        
-       // self.navigationController?.isNavigationBarHidden = true
-        
     }
 
     override func viewDidLoad() {
@@ -43,30 +40,13 @@ class SignInVC: UIViewController, UITextFieldDelegate {
     }
     
 
-    
-    override func viewWillDisappear(_ animated: Bool) {
-       // self.navigationController?.isNavigationBarHidden = false
-
-    }
  
     @IBAction func signInBtn_click(_ sender: Any) {
         
         //hide keyboard
         self.view.endEditing(true)
         
-        //if text fileds are empty
-        //if usernameTxt.text!.isEmpty {
-            
-            //show alert message
-      //      alert("用户名")
-            
-      //  }
-      //  if passwordTxt.text!.isEmpty {
-      //      //show alert message
-      //      alert("密码")
-//
-        //}
-        
+              
         
         //login function with username
         PFUser.logInWithUsername(inBackground: usernameTxt.text!.lowercased(), password: passwordTxt.text!) { (user: PFUser?, error) in

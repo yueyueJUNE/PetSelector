@@ -87,8 +87,4 @@ class SettingVC: UITableViewController {
         
     }
 
-    
-    
-   
-
 }

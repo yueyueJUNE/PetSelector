@@ -6,11 +6,13 @@ var colorFilter = [String]()
 var sizeFilter = [String]()
 var breedFilter = [String]()
 var location = ""
+var breedtxt = ""
 
 
 class FilterVC: UIViewController, LocationSelectorDelegate , BreedSelectorDelegate{
 
-    
+    @IBOutlet weak var scrollView: UIScrollView!
+
     @IBOutlet weak var breedLbl: UILabel!
     @IBOutlet weak var locationLbl: UILabel!
 
@@ -25,7 +27,6 @@ class FilterVC: UIViewController, LocationSelectorDelegate , BreedSelectorDelega
     
     @IBAction func selectGender(_ sender: UIButton) {
         changeButtonColor(sender)
-        
     }
 
     @IBAction func slectAge(_ sender: UIButton) {
@@ -34,19 +35,17 @@ class FilterVC: UIViewController, LocationSelectorDelegate , BreedSelectorDelega
     
     @IBAction func selectSize(_ sender: UIButton) {
         changeButtonColor(sender)
-
     }
     
     @IBAction func selectColor(_ sender: UIButton) {
         changeButtonColor(sender)
-
     }
     
     
     func changeButtonColor(_ sender: UIButton) {
         if (sender.backgroundColor == .white) {
             
-            sender.backgroundColor = .groupTableViewBackground
+            sender.backgroundColor = .clear
             
         } else {
             sender.backgroundColor = .white
@@ -64,6 +63,60 @@ class FilterVC: UIViewController, LocationSelectorDelegate , BreedSelectorDelega
         setDefaultbuttons(sizeBtn)
         setDefaultbuttons(colorBtn)
         
+        
+        if location == "" || location == "不限" {
+            location = "点我选择..."
+        }
+        
+        locationLbl.text = location
+        if location != "点我选择..." {
+            locationLbl.textColor = .black
+        }
+        breedLbl.text = breedtxt == "" ? "点我选择..." : breedtxt
+        if breedtxt != "" {
+            breedLbl.textColor = .black
+        }
+
+        
+        for gender in genderFilter {
+            if gender == "公" {
+                genderBtn[0].backgroundColor = .white
+            }
+            if gender == "母" {
+                genderBtn[1].backgroundColor = .white
+            }
+        
+        }
+        
+         for age in ageFilter {
+         
+         if age == "幼年" {ageBtn[0].backgroundColor = .white}
+         if age == "成年" {ageBtn[1].backgroundColor = .white}
+         if age == "老年" {ageBtn[2].backgroundColor = .white}
+         
+         }
+         
+         for age in sizeFilter {
+         if age == "迷你" {sizeBtn[0].backgroundColor = .white}
+         if age == "小型" {sizeBtn[1].backgroundColor = .white}
+         if age == "中型" {sizeBtn[2].backgroundColor = .white}
+         if age == "大型" {sizeBtn[3].backgroundColor = .white}
+         
+         }
+         
+         
+        for color in colorFilter {
+             if color == "黑" {colorBtn[0].backgroundColor = .white}
+             if color == "白" {colorBtn[1].backgroundColor = .white}
+             if color == "花" {colorBtn[2].backgroundColor = .white}
+             if color == "棕" {colorBtn[3].backgroundColor = .white}
+             if color == "黄" {colorBtn[4].backgroundColor = .white}
+             if color == "其他" {colorBtn[5].backgroundColor = .white}
+         
+        }
+         
+    
+        
         //自定义导航按钮
         let leftBarBtn = UIBarButtonItem(title: "取消", style: .plain, target: self, action: #selector(back))
         self.navigationItem.leftBarButtonItem = leftBarBtn
@@ -71,7 +124,6 @@ class FilterVC: UIViewController, LocationSelectorDelegate , BreedSelectorDelega
         let saveBtn = UIBarButtonItem(title: "保存", style: .plain, target: self, action:#selector(saveFilter))
         self.navigationItem.rightBarButtonItem = saveBtn
 
-        
         // tap to choose location
         let locationTap = UITapGestureRecognizer(target: self, action: #selector(selectLocation))
         //locationLbl.numberOfTapsRequired = 1
@@ -88,9 +140,8 @@ class FilterVC: UIViewController, LocationSelectorDelegate , BreedSelectorDelega
 
     func back() {
         self.dismiss(animated: true, completion: nil)
-       // _ = self.navigationController!.popViewController(animated: true)
-        
     }
+    
     func saveFilter(){
         genderFilter.removeAll(keepingCapacity: false)
         ageFilter.removeAll(keepingCapacity: false)
@@ -153,21 +204,19 @@ class FilterVC: UIViewController, LocationSelectorDelegate , BreedSelectorDelega
         NotificationCenter.default.post(name: Notification.Name(rawValue: "setFilter"), object: nil)
         
         self.dismiss(animated: true, completion: nil)
-        //_ = self.navigationController?.popViewController(animated: true)
-        
     }
 
     
     func setDefaultbuttons(_ buttons: [UIButton]){
     
         for button in buttons {
-            button.backgroundColor = .groupTableViewBackground
+            //button.backgroundColor = .clear
             button.layer.borderWidth = 1
-            button.layer.borderColor = UIColor.black.cgColor
+            button.layer.borderColor = UIColor.darkGray.cgColor
             
         }
-    
     }
+    
     
     func selectLocation() {
     let locationSelector = LocationSelector()
@@ -196,8 +245,19 @@ class FilterVC: UIViewController, LocationSelectorDelegate , BreedSelectorDelega
         for breed in breeds {
             selectedBreeds += breed + "\n"
         }
+        if selectedBreeds == "" {
+            selectedBreeds = "点我选择..."
+            breedLbl.textColor = .lightGray
+        }
+        
+        if selectedBreeds != "点我选择..." {
+
+            breedLbl.textColor = .black
+
+        }
+        print(selectedBreeds)
         breedLbl.text = selectedBreeds.trimmingCharacters(in: NSCharacterSet.newlines)
-        breedLbl.textColor = .black
+        breedtxt = selectedBreeds.trimmingCharacters(in: NSCharacterSet.newlines)
         self.navigationController?.popToViewController(self, animated: true)
     }
     

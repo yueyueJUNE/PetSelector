@@ -59,15 +59,12 @@ class UploadPhotos: UIViewController, HXPhotoViewDelegate, HXPhotoViewController
      override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = "填写资料"
         
-        //首先创建一个模糊效果
-        // let blurEffect = UIBlurEffect(style: .light)
-        //接着创建一个承载模糊效果的视图
-       // let alertView = UIVisualEffectView(effect: blurEffect)
-        //设置模糊视图的大小
-        //alertView.frame.size = CGSize(width: view.frame.width, height: 64)
-        
-        
+        //new back button
+        let backBtn = UIBarButtonItem(image: #imageLiteral(resourceName: "back"), style: .plain, target: self, action: #selector(back))
+        self.navigationItem.leftBarButtonItem = backBtn
+       
         
         avaImage.layer.cornerRadius = avaImage.frame.size.width / 2
         avaImage.clipsToBounds = true
@@ -221,12 +218,12 @@ class UploadPhotos: UIViewController, HXPhotoViewDelegate, HXPhotoViewController
         NotificationCenter.default.post(name: Notification.Name(rawValue: "beginActivityIndicator"), object: nil)
        
         
-        if locationLbl.text! == "点我选择..." {alert("请选择","地区")}
-        if breedLbl.text! == "点我选择..." {alert("请选择","品种")}
-        if avaImage.image == #imageLiteral(resourceName: "petAva") {alert("请选择","宠物头像")}
-        if photocount == 0 || photocount == nil {alert("请选择","详情页照片")}
+        if locationLbl.text! == "点我选择..." {JJHUD.showText(text: "请选择地区", delay: 1.25, enable: false)}
+        else if breedLbl.text! == "点我选择..." {JJHUD.showText(text: "请选择品种", delay: 1.25, enable: false)}
+        else if avaImage.image == #imageLiteral(resourceName: "petAva") {JJHUD.showText(text: "请选择宠物头像", delay: 1.25, enable: false)}
+        else if photocount == 0 || photocount == nil {JJHUD.showText(text: "请选择详情页照片", delay: 1.25, enable: false)}
                 
-        if locationLbl.text! != "点我选择..." && breedLbl.text! != "点我选择..." && avaImage.image != #imageLiteral(resourceName: "petAva") &&  petPhotos.count == photocount {
+        else if locationLbl.text! != "点我选择..." && breedLbl.text! != "点我选择..." && avaImage.image != #imageLiteral(resourceName: "petAva") &&  petPhotos.count == photocount {
             
         
             var petPhotoObject = [PFObject]()
@@ -291,36 +288,30 @@ class UploadPhotos: UIViewController, HXPhotoViewDelegate, HXPhotoViewController
 
                 
                 
-            } else {
+                } else {
                      NotificationCenter.default.post(name: Notification.Name(rawValue: "stopActivityIndicator"), object: nil)
         
                     // send notification 发布失败
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "uploadFail"), object: nil)
                     
 
-                            }
+                }
+                
             })
             
-            dismissToRootViewController()
+            // send notification 发布失败
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "reset"), object: nil)
+            self.navigationController?.popViewController(animated: true)
+            //dismissToRootViewController()
         }
       
     }
+    func back(){
     
-    
-    func dismissToRootViewController() {
-        var vc: UIViewController? = self
-        while ((vc?.presentingViewController) != nil) {
-            vc = vc?.presentingViewController
-        }
-        vc?.dismiss(animated: true) { _ in }
-        
-        // switch to another ViewController at 0 index of tabbar
-        let app: AppDelegate? = (UIApplication.shared.delegate as? AppDelegate)
-        let controller: UIViewController? = app?.window?.rootViewController
-        let rvc: TabBarVC? = (controller as? TabBarVC)
-        rvc?.selectedIndex = 0
-        
-    }
+        self.navigationController?.popViewController(animated: true)
 
+    }
+    
+    
 }
 

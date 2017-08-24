@@ -2,11 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "dog-1136335_1920.jpg",
+      "filename" : "post copy.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "post.png",
       "scale" : "2x"
     },
     {

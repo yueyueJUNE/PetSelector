@@ -39,19 +39,17 @@ class HomeVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuVi
     var headerView:UserHeaderView!
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        (self.tabBarController as! TabBarVC).postBtn.isHidden = self.hidesBottomBarWhenPushed
-        (self.tabBarController as! TabBarVC).view.bringSubview(toFront: (self.tabBarController as! TabBarVC).postBtn)
-        
+    
         self.navigationController?.navigationBar.subviews.first?.alpha = CGFloat(viewAppearAlpa)
         hiddenNav(hideNav)
-
         
     }
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(layoutHeaderView), name: NSNotification.Name(rawValue: "refreshFollow"), object: nil)
+
         
         NotificationCenter.default.addObserver(self, selector: #selector(setUI), name: Notification.Name(rawValue: "signIn"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(setUI), name: Notification.Name(rawValue: "logout"), object: nil)
