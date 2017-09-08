@@ -48,13 +48,13 @@ class HomeVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuVi
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(layoutHeaderView), name: NSNotification.Name(rawValue: "refreshFollow"), object: nil)
+       
 
         
         NotificationCenter.default.addObserver(self, selector: #selector(setUI), name: Notification.Name(rawValue: "signIn"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(setUI), name: Notification.Name(rawValue: "logout"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(deleteBackgroundView), name: Notification.Name(rawValue: "logout"), object: nil)
-
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshFollow), name: NSNotification.Name(rawValue: "refreshFollow"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(resetimImage), name: Notification.Name(rawValue: "uploadImageSuccess"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: NSNotification.Name(rawValue: "refresh"), object: nil)
@@ -87,20 +87,33 @@ class HomeVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuVi
     }
     
     func setUI(){
-
+        if headerView != nil {
+            headerView.removeFromSuperview()
+        }
+        
+        if tableViewArr.count > 0 {
+            tableViewArr.removeAll(keepingCapacity: false)
+        }
+        
+        if backgroundScrollView != nil {
+            backgroundScrollView?.removeFromSuperview()
+        }
+        
+        if menuView != nil {
+            menuView.removeFromSuperview()
+        }
+        
         if PFUser.current() != nil {
             layoutBackgroundScrollView()
+            
             let query = PFUser.query()
             query?.whereKey("objectId", equalTo: PFUser.current()!.objectId!)
             query?.getFirstObjectInBackground(block: { (object, error) in
                 if error == nil {
                     self.navigationItem.title = (object?.value(forKey: "username") as! String)
-                    //self.navigationController?.navigationBar.topItem?.title = (object?.value(forKey: "username") as! String)
                 }
             })
-
         } else {
-            
             self.navigationItem.title = "我"
         }
         self.automaticallyAdjustsScrollViewInsets = false
@@ -109,10 +122,10 @@ class HomeVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuVi
         
     }
     
-    func deleteBackgroundView() {
-    
-        self.backgroundScrollView?.removeFromSuperview()
-    
+    func logout() {
+        self.navigationItem.title = "我"
+        layoutHeaderView()
+        layoutMenuView()
     }
     
     //push to login VC
@@ -134,8 +147,6 @@ class HomeVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuVi
         }
     }
     
-    
-    
     func showChangeImageVC(_ type: String) {
         self.type = type
        
@@ -151,11 +162,10 @@ class HomeVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuVi
             
         }
     }
-  
-   
     
     func resetimImage(_ notification: Notification) {
-        
+        type = notification.userInfo?["type"] as! String
+
         if type == "ava" {
             headerView.avaImg.image! = notification.userInfo?["image"] as! UIImage
         } else {
@@ -165,15 +175,20 @@ class HomeVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuVi
         }
     
     }
-     
-     
     
+    func refreshFollow(_ notification: Notification) {
+        let query = PFQuery(className: "Follow")
+        query.whereKey("follower", equalTo: PFUser.current()!.objectId!)
+        query.countObjectsInBackground { (count, error) in
+            if error == nil {
+                self.headerView.followees.setTitle("\(count)", for: .normal)
+            }
+        }
+    }
     
     override func viewWillLayoutSubviews() {
         headerView.frame = CGRect(x: 0, y: headerView.frame.origin.y, width: screenWidth, height: headerHeight)
-
     }
-    
     
     
     /*创建底部scrollView,并将tableViewController添加到上面 */
@@ -234,9 +249,6 @@ class HomeVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuVi
         self.view.addSubview(self.menuView)
        
     }
-   
-    
-    
     
     //因为频繁用到header和menu的固定
     func headerMenuViewShowType(_ showType:headerMenuShowType){
@@ -262,7 +274,7 @@ class HomeVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuVi
         
         // make references to followersVC
         let followings = self.storyboard?.instantiateViewController(withIdentifier: "FollowerVC") as! FollowerVC
-        //followings.hidesBottomBarWhenPushed = true
+        followings.hidesBottomBarWhenPushed = true
         // present
         self.navigationController?.pushViewController(followings, animated: true)
         
@@ -279,9 +291,6 @@ class HomeVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuVi
    
     }
 
-    
-    
-    
     func tableViewDidScrollPassY(_ tableviewScrollY: CGFloat) {
         // 计算每次改变的值
         let seleoffSetY = tableviewScrollY - scrollY
@@ -300,9 +309,6 @@ class HomeVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuVi
         }else{
             // 将headerView的y值按照偏移量更改
             
-            // if seleoffSetY<0 {
-            //headerView.frame.origin.y -= 0
-            //} else {
             headerView.frame.origin.y -= seleoffSetY
             //}
             menuView.frame.origin.y = headerView.frame.maxY
@@ -397,12 +403,12 @@ class HomeVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuVi
         
         if hidden {
             self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
-            UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
+            //UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
             self.navigationController?.navigationBar.tintColor = .white
             
         }else{
             self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.black]
-            UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
+            //UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
             self.navigationController?.navigationBar.tintColor = .darkGray
             
             

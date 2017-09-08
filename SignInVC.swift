@@ -20,8 +20,9 @@ class SignInVC: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         
+        
         if UserDefaults.standard.string(forKey: "userID") != nil {
-            
+
             NotificationCenter.default.post(name: Notification.Name(rawValue: "signIn"), object: nil)
             self.navigationController?.popViewController(animated: false)
             
@@ -45,8 +46,6 @@ class SignInVC: UIViewController, UITextFieldDelegate {
         
         //hide keyboard
         self.view.endEditing(true)
-        
-              
         
         //login function with username
         PFUser.logInWithUsername(inBackground: usernameTxt.text!.lowercased(), password: passwordTxt.text!) { (user: PFUser?, error) in
@@ -98,6 +97,8 @@ class SignInVC: UIViewController, UITextFieldDelegate {
     }
     
  */
+    
+    /*
     func alert(_ titleMessage: String, _ alertMessage: String) {
         let alert = UIAlertController(title: titleMessage, message: alertMessage, preferredStyle: UIAlertControllerStyle.alert)
         
@@ -106,6 +107,7 @@ class SignInVC: UIViewController, UITextFieldDelegate {
             self.presentedViewController?.dismiss(animated: false, completion: nil)
         }
     }
+ */
     /*
     @IBAction func registerBtn_click(_ sender: Any) {
         

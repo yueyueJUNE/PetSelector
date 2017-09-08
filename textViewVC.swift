@@ -30,8 +30,6 @@ class textViewVC: UIViewController, UITextFieldDelegate {
             textField.keyboardType = .emailAddress
         }
         
-       
-        
         textField.text = content
        
     }
@@ -54,7 +52,8 @@ class textViewVC: UIViewController, UITextFieldDelegate {
         
         if titleTransfer == "邮箱" &&  !validateEmail(candidate: self.textField.text!){
             JJHUD.showText(text: "请输入有效的邮箱", delay: 1)
-            
+        } else if titleTransfer == "用户名" && self.textField.text == "" {
+            JJHUD.showText(text: "请输入用户名", delay: 1)
         } else {
         
             let query = PFUser.query()

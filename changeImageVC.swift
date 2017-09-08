@@ -17,6 +17,7 @@ class changeImageVC: UIViewController, HXPhotoViewControllerDelegate {
     
     @IBOutlet weak var cancel: UIButton!
     var type: String!
+    var user = userID.last
 
     
     @IBAction func cancel(_ sender: Any) {
@@ -38,7 +39,6 @@ class changeImageVC: UIViewController, HXPhotoViewControllerDelegate {
         present(UINavigationController(rootViewController: vc as UIViewController), animated: true) { _ in }
     }
     
-    var user = userID.last
 
     
     override func viewDidLoad() {
@@ -89,11 +89,11 @@ class changeImageVC: UIViewController, HXPhotoViewControllerDelegate {
         if _backgroundImageManager == nil {
             _backgroundImageManager = HXPhotoManager(type: HXPhotoManagerSelectedTypePhoto)
             _backgroundImageManager?.openCamera = true
-            _backgroundImageManager?.showFullScreenCamera = true
-            _backgroundImageManager?.photoMaxNum = 1
-             _backgroundImageManager?.videoMaxNum = 0
-            _backgroundImageManager?.maxNum = 1
-            _backgroundImageManager?.rowCount = 4
+            _backgroundImageManager?.singleSelected = true;
+            _backgroundImageManager?.singleSelecteClip = false
+            _backgroundImageManager?.isOriginal = true
+            _backgroundImageManager?.cameraType = HXPhotoManagerCameraTypeSystem
+
         }
         return _backgroundImageManager
     }
@@ -104,66 +104,76 @@ class changeImageVC: UIViewController, HXPhotoViewControllerDelegate {
         if _avaImageManager == nil {
             _avaImageManager = HXPhotoManager(type: HXPhotoManagerSelectedTypePhoto)
             _avaImageManager?.openCamera = true
+            _avaImageManager?.isOriginal = true
             _avaImageManager?.singleSelected = true
-            _avaImageManager?.showFullScreenCamera = true
-            
+            _avaImageManager?.singleSelecteClip = true
+            _avaImageManager?.cameraType = HXPhotoManagerCameraTypeFullScreen
         }
         return _avaImageManager
     }
     
     func photoViewControllerDidNext(_ allList: [HXPhotoModel]!, photos: [HXPhotoModel]!, videos: [HXPhotoModel]!, original: Bool) {
-        let model: HXPhotoModel? = photos.first
-        JJHUD.showLoading(text: "正在上传图片")
-
-        let query = PFUser.query()
-        query?.whereKey("objectId", equalTo: PFUser.current()!.objectId!)
-       
-        query?.getFirstObjectInBackground(block: { (object, error) in
+        
+        
+        var fetchType: HXPhotoToolsFetchType!
+        if original {
+            fetchType = HXPhotoToolsFetchOriginalImageTpe
+        } else {
+            fetchType = HXPhotoToolsFetchHDImageType
+        }
+        
+        HXPhotoTools.getImageForSelectedPhoto(photos, type: fetchType) { (images:[UIImage]?) in
             
-            if error == nil {
+            JJHUD.showLoading(text: "正在上传图片")
+            // send picture to server
+            //let imageData = UIImageJPEGRepresentation((images?.first)!, 1)
+            let imageData = images!.first!.compressTo(2)!
+            let imageFile = PFFile(name: "userImage.jpg", data: imageData)
+            
+            let query = PFUser.query()
+            query?.whereKey("objectId", equalTo: PFUser.current()!.objectId!)
+            
+            query?.getFirstObjectInBackground(block: { (object, error) in
                 
-                // send ava picture to server
-                let imageData = UIImageJPEGRepresentation((model?.thumbPhoto)!, 1)
-                let imageFile = PFFile(name: "petava.jpg", data: imageData!)
-                
-                if self.type == "ava" {
-                
-                    object?["ava"] = imageFile
-                    object?.saveInBackground(block: { (success, error) in
-                        if success {
-                            self.imageView.image = model?.thumbPhoto
-                            JJHUD.hide()
-                            JJHUD.showSuccess(text: "修改成功", delay: 1)
-                            
-                            // send notification 发布成功
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "uploadImageSuccess"), object: nil, userInfo:["image": self.imageView.image!])
-                        }
-                    })
-                } else {
-                
-                    object?["backgroundImage"] = imageFile
-                    object?.saveInBackground(block: { (success, error) in
-                        if success {
-                            self.imageView.image = model?.thumbPhoto
-                            JJHUD.hide()
-                            JJHUD.showSuccess(text: "修改成功", delay: 1)
-                            
-                            // send notification 发布成功
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "uploadImageSuccess"), object: nil, userInfo:["image": self.imageView.image!])
-                        }
-                    })
-                
-                
+                if error == nil {
+                    
+                    if self.type == "ava" {
+                        
+                        object?["ava"] = imageFile
+                        object?.saveInBackground(block: { (success, error) in
+                            if success {
+                               
+                                self.imageView.image = UIImage(data: imageData)
+                                JJHUD.hide()
+                                JJHUD.showSuccess(text: "修改成功", delay: 1)
+                                
+                                // send notification 发布成功
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "uploadImageSuccess"), object: nil, userInfo:["type": "ava", "image": self.imageView.image!])
+                            }
+                        })
+                    } else {
+                        
+                        object?["backgroundImage"] = imageFile
+                        object?.saveInBackground(block: { (success, error) in
+                            if success {
+                                self.imageView.image = UIImage(data: imageData)
+                                JJHUD.hide()
+                                JJHUD.showSuccess(text: "修改成功", delay: 1)
+                                
+                                // send notification 发布成功
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "uploadImageSuccess"), object: nil, userInfo:["type": "background", "image": self.imageView.image!])
+                            }
+                        })
+                    }
                 }
-            }
+                
+            })
 
             
-        })
+        }
         
         
     }
-    
-    
     
     func photoViewControllerDidCancel() {}
 

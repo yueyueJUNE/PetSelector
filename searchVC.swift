@@ -59,17 +59,14 @@ class searchVC: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITa
     // collectionView arrays to hold infromation from server
     var picArray = [PFFile]()
     var uuidArray = [String]()
-    var page : Int = 10
+    var page : Int = 20
     
     
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         
-        //(self.tabBarController as! TabBarVC).postBtn.isHidden = self.hidesBottomBarWhenPushed
-       // (self.tabBarController as! TabBarVC).view.bringSubview(toFront: (self.tabBarController as! TabBarVC).postBtn)
-
-    }
+      }
     
     override func viewWillDisappear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
@@ -216,13 +213,7 @@ class searchVC: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITa
             }
             
         }
-     //if searchBar.selectedScopeButtonIndex == 0 {
-    // loadUsers("username", "(?i)" + searchBar.text!)
-    // } else {
      
-    // loadPets("petname", "(?i)" + searchBar.text!)
-     
-    // }
      }
     
     
@@ -266,28 +257,7 @@ class searchVC: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITa
         }
     }
     
-    /*
-    func endRefreshByType(_ type: type){
-        switch type {
-        case .endHeader:
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-                
-                //下拉刷行
-                self.weakRefreshHeader?.endRefreshing()
-            }
-            
-            break
-            
-        case .endFooter:
-            self.refreshFooter?.endRefreshing()
-            break
-            
-        }
-        
-    }
-*/
     
-   
     // load users function
     func loadUsers(_ key: String, _ value: String) {//, _ endfreshType: type) {
         print("page\(page)")
@@ -311,6 +281,7 @@ class searchVC: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITa
                     notFoundLbl.frame.size = CGSize(width: view.frame.size.width, height: view.frame.size.height)
                     notFoundLbl.center = view.center
                     notFoundLbl.text = "没有搜索结果"
+                    notFoundLbl.textColor = .gray
                     notFoundLbl.font = UIFont.systemFont(ofSize: 19)
                     notFoundLbl.textAlignment = .center
                     view.addSubview(notFoundLbl)
@@ -326,6 +297,7 @@ class searchVC: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITa
                         self.useravaArray.append(object.value(forKey: "ava") as! PFFile)
                         self.typeArray.append((object.value(forKeyPath: "type") as! Bool) == true ? "收容所" : "个人")
                         self.userIDArray.append(object.objectId!)
+                        print(self.userIDArray.count)
                         
                         self.tableView.reloadData()
                        // self.endRefreshByType(endfreshType)
@@ -377,6 +349,7 @@ class searchVC: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITa
                     notFoundLbl.frame.size = CGSize(width: view.frame.size.width, height: view.frame.size.height)
                     notFoundLbl.center = view.center
                     notFoundLbl.text = "没有搜索结果"
+                    notFoundLbl.textColor = .gray
                     notFoundLbl.font = UIFont.systemFont(ofSize: 19)
                     notFoundLbl.textAlignment = .center
                     view.addSubview(notFoundLbl)
@@ -408,19 +381,14 @@ class searchVC: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITa
             } else {
                 
                 if error!.localizedDescription == "似乎已断开与互联网的连接。" || error!.localizedDescription == "Network connection failed." || error!.localizedDescription == "The Internet connection appears to be offline."{
-                    let alert = UIAlertController(title: "网络问题", message: "似乎已断开与互联网的连接。", preferredStyle: UIAlertControllerStyle.alert)
-                    let ok = UIAlertAction(title: "确定", style: UIAlertActionStyle.cancel, handler: nil)
-                    alert.addAction(ok)
-                    self.present(alert, animated: true, completion: nil)
                     
-                    
+                    JJHUD.showInfo(text: "已与网络断开连接", delay: 1.25, enable: false)
+
                 }
             }
         })
         
     }
-    
- 
     
     //点击搜索按钮
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -461,16 +429,37 @@ class searchVC: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITa
         // reset text
         searchBar.text = ""
         
-        /*
-        if searchBar.selectedScopeButtonIndex == 0 {
-            // reset shown users
-            loadUsers("username", "")
-        } else {
+        if self.searchBar.selectedScopeButtonIndex == 0 {
+           
+            self.usernameArray.removeAll(keepingCapacity: false)
+            self.useravaArray.removeAll(keepingCapacity: false)
+            self.typeArray.removeAll(keepingCapacity: false)
+            self.userIDArray.removeAll(keepingCapacity: false)
             
-            // reset shown users
-            loadUsers("petname", "")
+            self.tableView.tableFooterView = UIView()
+            self.tableView.reloadData()
+          
+            
+        } else {
+        
+           
+            //clean up
+            self.petnameArray.removeAll(keepingCapacity: false)
+            self.breedArray.removeAll(keepingCapacity: false)
+            self.genderArray.removeAll(keepingCapacity: false)
+            self.ageArray.removeAll(keepingCapacity: false)
+            self.sizeArray.removeAll(keepingCapacity: false)
+            self.dateArray.removeAll(keepingCapacity: false)
+            self.petavaArray.removeAll(keepingCapacity: false)
+            self.petIDArray.removeAll(keepingCapacity: false)
+            self.ownerArray.removeAll(keepingCapacity: false)
+            
+            self.tableView.tableFooterView = UIView()
+            self.tableView.reloadData()
+                
+           
         }
-         */
+        
     }
     
    
@@ -481,8 +470,6 @@ class searchVC: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITa
         //不hide cancel button
         let btnCancel: UIButton? = searchBar.value(forKey: "_cancelButton") as? UIButton
         btnCancel?.isEnabled = true
-
-        
 
     }
     
@@ -500,8 +487,8 @@ class searchVC: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITa
         if searchBar.selectedScopeButtonIndex == 0 {
             
             if page <= userIDArray.count {
-                // increase page size to load +10 posts
-                page = page + 10
+                // increase page size to load +20 posts
+                page = page + 20
                 self.loadUsers("username", "(?i)" + self.searchBar.text!)
 
             }
@@ -510,7 +497,7 @@ class searchVC: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITa
             if page <= petIDArray.count {
                 
                 // increase page size to load +10 posts
-                page = page + 10
+                page = page + 20
                 self.loadPets("petname", "(?i)" + self.searchBar.text!)
 
             }
@@ -554,7 +541,7 @@ class searchVC: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITa
             
             // STEP 2. Hide follow button for current user
             if PFUser.current() == nil || cell.userIDLbl.text == PFUser.current()!.objectId! {
-                cell.followBtn.isHidden = true
+                    cell.followBtn.isHidden = true
             } else {
             
             // STEP 3. Show do current user following or do not if current user is not null
@@ -563,7 +550,10 @@ class searchVC: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITa
                 query.whereKey("followee", equalTo: cell.userIDLbl.text!)
                 query.countObjectsInBackground (block: { (count, error) -> Void in
                     if error == nil {
+                        //很重要
+                        cell.followBtn.isHidden = false
                         if count == 0 {
+                            
                             cell.followBtn.setTitle("+ 关注", for: UIControlState.normal)
                             cell.followBtn.layer.borderColor = self.green.cgColor
                             cell.followBtn.setTitleColor(self.green, for: UIControlState())

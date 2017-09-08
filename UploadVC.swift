@@ -60,35 +60,45 @@ class UploadVC: UIViewController {
     @IBAction func neuterBtn_click(_ sender: UIButton) {
         setDefaultButtonColors(neuterBtn)
         if sender.tag == 0 {
-            sender.setTitleColor(green, for: UIControlState())
+            sender.backgroundColor = green
+            sender.layer.borderColor = green.cgColor
         } else {
-            sender.setTitleColor(.red, for: UIControlState())
-            
+            sender.backgroundColor = .red
+            sender.layer.borderColor = UIColor.red.cgColor
+
         }
-        sender.backgroundColor = .white
+        sender.setTitleColor(.white, for: UIControlState())
         
     }
     
     @IBAction func dewormBtn_click(_ sender: UIButton) {
         setDefaultButtonColors(dewormBtn)
         if sender.tag == 0 {
-            sender.setTitleColor(green, for: UIControlState())
+            sender.backgroundColor = green
+            sender.layer.borderColor = green.cgColor
+
         } else {
-            sender.setTitleColor(.red, for: UIControlState())
+            sender.backgroundColor = .red
+            sender.layer.borderColor = UIColor.red.cgColor
+
             
         }
-        sender.backgroundColor = .white
+        sender.setTitleColor(.white, for: UIControlState())
         
     }
     
     @IBAction func shotBtn_click(_ sender: UIButton) {
         setDefaultButtonColors(shotBtn)
         if sender.tag == 0 {
-            sender.setTitleColor(green, for: UIControlState())
+            sender.backgroundColor = green
+            sender.layer.borderColor = green.cgColor
+            
         } else {
-            sender.setTitleColor(.red, for: UIControlState())
+            sender.backgroundColor = .red
+            sender.layer.borderColor = UIColor.red.cgColor
+
         }
-        sender.backgroundColor = .white
+        sender.setTitleColor(.white, for: UIControlState())
         
     }
     
@@ -96,29 +106,29 @@ class UploadVC: UIViewController {
         
     @IBAction func selectGender(_ sender: UIButton) {
         setDefaultButtonColors(genderBtn)
-        sender.setTitleColor(.black, for: UIControlState())
-        sender.backgroundColor = .white
+        sender.setTitleColor(.white, for: UIControlState())
+        sender.backgroundColor = .darkGray
         
     }
         
     @IBAction func slectAge(_ sender: UIButton) {
             
         setDefaultButtonColors(ageBtn)
-        sender.setTitleColor(.black, for: UIControlState())
-        sender.backgroundColor = .white
+        sender.setTitleColor(.white, for: UIControlState())
+        sender.backgroundColor = .darkGray
     }
         
     @IBAction func selectSize(_ sender: UIButton) {
         setDefaultButtonColors(sizeBtn)
-        sender.setTitleColor(.black, for: UIControlState())
-        sender.backgroundColor = .white
+        sender.setTitleColor(.white, for: UIControlState())
+        sender.backgroundColor = .darkGray
         
     }
         
     @IBAction func selectColor(_ sender: UIButton) {
         setDefaultButtonColors(colorBtn)
-        sender.setTitleColor(.black, for: UIControlState())
-        sender.backgroundColor = .white
+        sender.setTitleColor(.white, for: UIControlState())
+        sender.backgroundColor = .darkGray
     }
     
     
@@ -153,7 +163,7 @@ class UploadVC: UIViewController {
         JJHUD.showText(text: "请先登录", delay: 1)
     
     }
-    
+    /*
     //update button color according to data from uploaded data
     func setButtonColor(_ data: String, _ buttons: [UIButton]) {
     
@@ -164,12 +174,13 @@ class UploadVC: UIViewController {
             }
         }
     }
+ */
     
     //save data chose into the server
     func saveButtonTitle(_ buttons: [UIButton]) -> String {
         var data = ""
         for button in buttons {
-             if button.backgroundColor == .white {
+             if button.titleColor(for: .normal) == .white {
                 data = button.title(for: UIControlState())!
             }
         }
@@ -187,22 +198,22 @@ class UploadVC: UIViewController {
         self.view.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(hideTap)
                     
-        setDefaultButtonBorders(ageBtn)
-        setDefaultButtonBorders(genderBtn)
-        setDefaultButtonBorders(sizeBtn)
-        setDefaultButtonBorders(ageBtn)
-        setDefaultButtonBorders(colorBtn)
-        setDefaultButtonBorders(neuterBtn)
-        setDefaultButtonBorders(dewormBtn)
-        setDefaultButtonBorders(shotBtn)
+        setDefaultButtonColors(ageBtn)
+        setDefaultButtonColors(genderBtn)
+        setDefaultButtonColors(sizeBtn)
+        setDefaultButtonColors(ageBtn)
+        setDefaultButtonColors(colorBtn)
+        setDefaultButtonColors(neuterBtn)
+        setDefaultButtonColors(dewormBtn)
+        setDefaultButtonColors(shotBtn)
         
         self.navigationItem.title = "填写资料"
         
         let saveBtn = UIBarButtonItem(title: "下一步", style: .plain, target: self, action:#selector(nextStep))
         self.navigationItem.rightBarButtonItem = saveBtn
         
-        // receive notification 发布成功
-        NotificationCenter.default.addObserver(self, selector: #selector(reload), name: NSNotification.Name(rawValue: "reset"), object: nil)
+        // receive notification 发布
+        NotificationCenter.default.addObserver(self, selector: #selector(reload), name: NSNotification.Name(rawValue: "beginActivityIndicator"), object: nil)
         
         // check notifications of keyboard - shown or not
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -216,13 +227,13 @@ class UploadVC: UIViewController {
         scrollView.setContentOffset(CGPoint(x: 0, y: -scrollView.contentInset.top), animated: true)
         
         
-        setDefaultButtonBorders(ageBtn)
-        setDefaultButtonBorders(genderBtn)
-        setDefaultButtonBorders(sizeBtn)
-        setDefaultButtonBorders(colorBtn)
-        setDefaultButtonBorders(neuterBtn)
-        setDefaultButtonBorders(dewormBtn)
-        setDefaultButtonBorders(shotBtn)
+        setDefaultButtonColors(ageBtn)
+        setDefaultButtonColors(genderBtn)
+        setDefaultButtonColors(sizeBtn)
+        setDefaultButtonColors(colorBtn)
+        setDefaultButtonColors(neuterBtn)
+        setDefaultButtonColors(dewormBtn)
+        setDefaultButtonColors(shotBtn)
         
         setDefaultButtonColors(ageBtn)
         setDefaultButtonColors(genderBtn)
@@ -246,15 +257,12 @@ class UploadVC: UIViewController {
         
     }
     
-    
-    
-    
-        func nextStep(){
+    func nextStep(){
+        
+        if PFUser.current() == nil {
+            JJHUD.showText(text: "请先登录", delay: 1)
             
-            if PFUser.current() == nil {
-                JJHUD.showText(text: "请先登录", delay: 1)
-                
-            } else {
+        } else {
             //clear the variables
             petnameUpload = ""
             genderUpload = ""
@@ -284,46 +292,6 @@ class UploadVC: UIViewController {
                 shotUpload = saveButtonTitle(shotBtn) == "已注射" ? true : false
             }
 
- 
-            /*
-            
-            for button in genderBtn {
-                if button.backgroundColor == .white {
-                    if button.tag == 0 {genderUpload = "公"}
-                    else if button.tag == 1 {genderUpload = "母"}
-                }
-            }
-            
-            for button in ageBtn {
-                if button.backgroundColor == .white {
-                    if button.tag == 0 {ageUpload = "幼年"}
-                    else if button.tag == 1 {ageUpload = "成年"}
-                    else if button.tag == 2 {ageUpload = "老年"}
-                }
-            }
-            
-            for button in sizeBtn {
-                if button.backgroundColor == .white {
-                    if button.tag == 0 {sizeUpload = "迷你"}
-                    else if button.tag == 1 {sizeUpload = "小型"}
-                    else if button.tag == 2 {sizeUpload = "中型"}
-                    else if button.tag == 3 {sizeUpload = "大型"}
-                    
-                }
-            }
-            
-            for button in colorBtn {
-                if button.backgroundColor == .white {
-                    if button.tag == 0 {colorUpload = "黑"}
-                    else if button.tag == 1 {colorUpload = "白"}
-                    else if button.tag == 2 {colorUpload = "花"}
-                    else if button.tag == 3 {colorUpload = "棕"}
-                    else if button.tag == 4 {colorUpload = "黄"}
-                    else if button.tag == 5 {colorUpload = "其他"}
-                    
-                }
-            }
-            */
       
             petnameUpload = petName.text!
             storyUpload = storyTxt.text!
@@ -349,45 +317,19 @@ class UploadVC: UIViewController {
                 UploadPhotos.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(UploadPhotos, animated: true)
             }
-            // send notification to homeVC to be reloaded
-            //NotificationCenter.default.post(name: Notification.Name(rawValue: "setFilter"), object: nil)
-            
-           // _ = self.navigationController?.popViewController(animated: true)
         }
     }
     
     func setDefaultButtonColors(_ buttons: [UIButton]){
         
         for button in buttons {
-            button.backgroundColor = .clear
-            button.setTitleColor(UIColor.darkGray, for: UIControlState())
-        }
-        
-    }
-    
-    
-    func setDefaultButtonBorders(_ buttons: [UIButton]){
-        
-        for button in buttons {
             button.layer.borderWidth = 1
             button.layer.borderColor = UIColor.darkGray.cgColor
+            button.setTitleColor(.darkGray, for: .normal)
+            button.backgroundColor = .white
         }
-        
     }
-/*
 
-    func alert(_ titleMessage: String, _ alertMessage: String) {
-        let alert = UIAlertController(title: titleMessage, message: alertMessage, preferredStyle: UIAlertControllerStyle.alert)
-        
-        //let ok = UIAlertAction(title: "确定", style: UIAlertActionStyle.cancel, handler: nil)
-        //alert.addAction(ok)
-        self.present(alert, animated: true, completion: nil)
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.25) {
-            self.presentedViewController?.dismiss(animated: false, completion: nil)
-        }
-    }
-    */
-    
     
     func hideKeyboard(){
         self.view.endEditing(true)

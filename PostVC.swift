@@ -14,7 +14,6 @@ var petID = [String]()
 class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
   
     
-    //private var totalRowCount: Int = 0
     private var refreshFooter:  SDRefreshFooterView?
     weak var weakRefreshHeader: SDRefreshHeaderView?
     @IBOutlet var tableView: UITableView!
@@ -47,9 +46,7 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        //evey time the view will appear, set the page to 10.显示十项
-        
+        self.navigationItem.title = "帖子"
         self.tableView.tableFooterView = UIView()
         self.tableView.estimatedRowHeight = 99.5
         self.tableView.rowHeight=UITableViewAutomaticDimension
@@ -62,24 +59,20 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         NotificationCenter.default.addObserver(self, selector: #selector(beginActivityIndicator), name: Notification.Name(rawValue: "beginActivityIndicator"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(stopActivityIndicator), name: Notification.Name(rawValue: "stopActivityIndicator"), object: nil)
         
-        
-        // calling function to load posts
-        self.tableView.register(UINib.init(nibName: "PostCell", bundle: nil), forCellReuseIdentifier: "Cell")
-         NotificationCenter.default.addObserver(self, selector: #selector(resetPage), name: NSNotification.Name(rawValue: "setFilter"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(resetPage), name: NSNotification.Name(rawValue: "setFilter"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(loadPosts), name: NSNotification.Name(rawValue: "setFilter"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(loadPosts), name: NSNotification.Name(rawValue: "deletePost"), object: nil)
-
-        
-       page = 10
-        
         NotificationCenter.default.addObserver(self, selector: #selector(loadPosts), name: NSNotification.Name(rawValue: "signIn"), object: nil)
         
+        page = 20
+        
+        //register xib file
+        self.tableView.register(UINib.init(nibName: "PostCell", bundle: nil), forCellReuseIdentifier: "Cell")
         self.activityIndicator.isHidden = true
     
         setupHeader()
         setupFooter()
-
         
     }
     
@@ -87,13 +80,11 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBAction func tapFllter(_ sender: Any) {
         let filter = self.storyboard?.instantiateViewController(withIdentifier: "filter")// as! navVC
-        //filter.hidesBottomBarWhenPushed = true
-        //self.navigationController?.pushViewController(filter, animated: true)
         self.present(filter!, animated: true, completion: nil)
     }
     
     func resetPage() {
-        page = 10
+        page = 20
     
     }
    
@@ -102,7 +93,6 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         let refreshHeader = SDRefreshHeaderView()
         refreshHeader.add(toScroll: self.tableView)
-        //weak var weakRefreshHeader: SDRefreshHeaderView? = refreshHeader
         weakRefreshHeader = refreshHeader
 
         //weak var weakSelf = self
@@ -128,8 +118,8 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         if page <= petIDArray.count {
             
-            // increase page size to load +10 posts
-            page = page + 10
+            // increase page size to load +20 posts
+            page = page + 20
             loadPets(.endFooter)
         } else {
             self.refreshFooter?.endRefreshing()
@@ -154,7 +144,15 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         loadPets(.endLoading)
     }
   
-    
+    func checkPalindrome(word: String) -> Bool {
+        let chars = Array(word.characters)
+        for index in  0..<chars.count/2 - 1 {
+            if chars[index] != chars[chars.count/2 + 1 + index] {
+                return false
+            }
+        }
+        return true
+    }
     
     func loadPets(_ endfreshType: type) {
         
@@ -177,10 +175,18 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             query.whereKey("breed", containedIn: breedFilter)
         }
         if location != "不限"  && location != "" {
-            query.whereKey("location".trimmingCharacters(in: NSCharacterSet.whitespaces), equalTo: location.trimmingCharacters(in: NSCharacterSet.whitespaces))
+            let locationwithoutspace = location.trimmingCharacters(in: NSCharacterSet.whitespaces)
+            if checkPalindrome(word: locationwithoutspace) {
+                query.whereKey("location", contains: locationwithoutspace.chopPrefix(locationwithoutspace.characters.count/2 + 1))
+            
+            } else {
+            
+                query.whereKey("location".trimmingCharacters(in: NSCharacterSet.whitespaces), equalTo: locationwithoutspace)
+            }
         }
-
         query.limit = self.page
+        query.whereKey("adopted", equalTo: false)
+
         query.addDescendingOrder("updatedAt")
                query.findObjectsInBackground(block:{ (objects, error) -> Void in
             
@@ -205,6 +211,7 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     notFoundLbl.frame.size = CGSize(width: view.frame.size.width, height: view.frame.size.height)
                     notFoundLbl.center = view.center
                     notFoundLbl.text = "没有搜索结果"
+                    notFoundLbl.textColor = .gray
                     notFoundLbl.font = UIFont.systemFont(ofSize: 19)
                     notFoundLbl.textAlignment = .center
                     view.addSubview(notFoundLbl)
@@ -239,11 +246,8 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             } else {
                 
                 if error!.localizedDescription == "似乎已断开与互联网的连接。" || error!.localizedDescription == "Network connection failed." || error!.localizedDescription == "The Internet connection appears to be offline."{
-                    let alert = UIAlertController(title: "网络问题", message: "似乎已断开与互联网的连接。", preferredStyle: UIAlertControllerStyle.alert)
-                    let ok = UIAlertAction(title: "确定", style: UIAlertActionStyle.cancel, handler: nil)
-                    alert.addAction(ok)
-                    self.present(alert, animated: true, completion: nil)
                     
+                    JJHUD.showInfo(text: "已与网络断开连接", delay: 1.25, enable: false)
                     
                 }
             }
@@ -258,7 +262,6 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             case .endHeader:
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
                     
-                    // weakSelf!.totalRowCount += 10
                     //下拉刷行 loadpost
                     self.weakRefreshHeader?.endRefreshing()
                 }
@@ -495,13 +498,7 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
   */
     }
     
-    
-    
-    
-    
-    
-    
-    
+
     
     // selected a pet
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -519,6 +516,19 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         
     }
+
+    func uploadSuccess() {
+        JJHUD.showSuccess(text: "上传成功", delay: 1.25)
+        loadPosts()
+        
+    }
+    
+    func uploadFail() {
+        JJHUD.showError(text: "上传失败", delay: 1.25)
+    }
+    
+}
+
     
     /*
     // swipe cell for actions
@@ -696,17 +706,3 @@ class postVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     */
     
-   func uploadSuccess() {
-    
-        loadPosts()
-        JJHUD.showSuccess(text: "上传成功", delay: 1.25)
-        
-        
-    }
-    
-    func uploadFail() {
-        JJHUD.showError(text: "上传失败", delay: 1.25)
-    }
-    
- 
-}

@@ -28,18 +28,34 @@ class LocationSelector: UITableViewController {
     var locations: NSArray!
     var locationPath = ""
     var locationName = ""
+    var pickerType: String!
     
     var delegate: LocationSelectorDelegate?
     
+    init(_ pickerType: String){
+        self.pickerType = pickerType
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         if locationType == .state {
-            if let path = Bundle.main.path(forResource: "area", ofType: "plist") {
-                locations = NSArray(contentsOfFile: path)
+            if pickerType == "filter" {
+                if let path = Bundle.main.path(forResource: "area", ofType: "plist") {
+                    locations = NSArray(contentsOfFile: path)
+                }
             }
-           
+            if pickerType == "upload" {
+                if let path = Bundle.main.path(forResource: "areaPicker", ofType: "plist") {
+                    locations = NSArray(contentsOfFile: path)
+                }
+            }
+
         }
         
         self.tableView.tableFooterView = UIView()
@@ -51,15 +67,12 @@ class LocationSelector: UITableViewController {
 
     }
     
-    // MARK: - Table view data source
-    
     override func numberOfSections(in tableView: UITableView) -> Int {
        
         return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         
         return locations.count
     }
@@ -79,7 +92,6 @@ class LocationSelector: UITableViewController {
         case .city:
             cell.textLabel?.text = (self.locations[indexPath.row] as! NSDictionary)["city"] as? String
             //case .area:
-        //cell.textLabel?.text = self.locations[indexPath.row] as? String
         default: break
             
         }
@@ -88,18 +100,16 @@ class LocationSelector: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if locationType == .state {
-           
-            return "全国"
-            
-        }
+       // if locationType == .state {
+       //     return "全国"
+       // }
         
         return nil
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let nextLocationSelector = LocationSelector()
+        let nextLocationSelector = LocationSelector(pickerType)
         nextLocationSelector.delegate = self.delegate
         let currentLocation = tableView.cellForRow(at: indexPath)?.textLabel?.text
         nextLocationSelector.locationPath = "\(locationPath) \(currentLocation!)"
@@ -127,7 +137,6 @@ class LocationSelector: UITableViewController {
 
     func back(){
         _ = self.navigationController?.popViewController(animated: true)
-    
     }
 
 }

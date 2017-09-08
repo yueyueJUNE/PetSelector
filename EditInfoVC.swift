@@ -170,13 +170,9 @@ class EditInfoVC: UITableViewController, STPickerAreaDelegate, STPickerSingleDel
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-    
-        if section == 1 {
-            return 20
-        } else {
-            return 0
-        }
-       
+        
+        return 20
+        
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -185,7 +181,7 @@ class EditInfoVC: UITableViewController, STPickerAreaDelegate, STPickerSingleDel
         if user == nil && PFUser.current() != nil {
             cell.accessoryType = .disclosureIndicator
             
-        } else if user == PFUser.current()!.objectId {
+        } else if user == PFUser.current()?.objectId {
              cell.accessoryType = .disclosureIndicator
         } else {
         
@@ -219,7 +215,7 @@ class EditInfoVC: UITableViewController, STPickerAreaDelegate, STPickerSingleDel
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if (user == nil && PFUser.current() != nil) || user == PFUser.current()!.objectId {
+        if (user == nil && PFUser.current() != nil) || user == PFUser.current()?.objectId {
        
             // recall cell to call further info
             let cell = tableView.cellForRow(at: indexPath) as! editInfoCell
@@ -243,7 +239,6 @@ class EditInfoVC: UITableViewController, STPickerAreaDelegate, STPickerSingleDel
                 let pickerSingle = STPickerSingle()
                 pickerSingle.arrayData = ["男","女"]
                 pickerSingle.title = "请选择性别"
-                    //pickerSingle.titleUnit = "人民币"
                 pickerSingle.contentMode = STPickerContentMode.bottom
                 pickerSingle.delegate = self
                 pickerSingle.show()
@@ -255,19 +250,15 @@ class EditInfoVC: UITableViewController, STPickerAreaDelegate, STPickerSingleDel
                 textView.hidesBottomBarWhenPushed = true
                 content = cell.detailLbl.text!
                 titleTransfer = "简介"
-                let item = UIBarButtonItem(title: "返回", style: .plain, target: nil, action: nil)
-                self.navigationItem.backBarButtonItem = item
+               
                 textView.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(textView, animated: true)
 
-            
             } else if cell.titleLbl.text == "地址"{
                 content = cell.detailLbl.text!
                 titleTransfer = "地址"
                 let textView = self.storyboard?.instantiateViewController(withIdentifier: "bioTextViewVC") as! bioTextViewVC
                 
-                let item = UIBarButtonItem(title: "返回", style: .plain, target: nil, action: nil)
-                self.navigationItem.backBarButtonItem = item
                 textView.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(textView, animated: true)
             
@@ -275,8 +266,7 @@ class EditInfoVC: UITableViewController, STPickerAreaDelegate, STPickerSingleDel
                 content = cell.detailLbl.text!
                 titleTransfer = "用户名"
                 let textView = self.storyboard?.instantiateViewController(withIdentifier: "textViewVC") as! textViewVC
-                let item = UIBarButtonItem(title: "返回", style: .plain, target: nil, action: nil)
-                self.navigationItem.backBarButtonItem = item
+         
                 textView.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(textView, animated: true)
             
@@ -285,8 +275,6 @@ class EditInfoVC: UITableViewController, STPickerAreaDelegate, STPickerSingleDel
                 titleTransfer = "社交账号"
 
                 let textView = self.storyboard?.instantiateViewController(withIdentifier: "socialMediaVC") as! socialMediaVC
-                let item = UIBarButtonItem(title: "返回", style: .plain, target: nil, action: nil)
-                self.navigationItem.backBarButtonItem = item
 
                 textView.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(textView, animated: true)
@@ -295,8 +283,6 @@ class EditInfoVC: UITableViewController, STPickerAreaDelegate, STPickerSingleDel
                 content = cell.detailLbl.text!
                 titleTransfer = "电话"
                 let textView = self.storyboard?.instantiateViewController(withIdentifier: "textViewVC") as! textViewVC
-                let item = UIBarButtonItem(title: "返回", style: .plain, target: nil, action: nil)
-                self.navigationItem.backBarButtonItem = item
                 textView.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(textView, animated: true)
                 
@@ -304,8 +290,8 @@ class EditInfoVC: UITableViewController, STPickerAreaDelegate, STPickerSingleDel
                 content = cell.detailLbl.text!
                 titleTransfer = "邮箱"
                 let textView = self.storyboard?.instantiateViewController(withIdentifier: "textViewVC") as! textViewVC
-                let item = UIBarButtonItem(title: "返回", style: .plain, target: nil, action: nil)
-                self.navigationItem.backBarButtonItem = item
+                //let item = UIBarButtonItem(title: "返回", style: .plain, target: nil, action: nil)
+                //self.navigationItem.backBarButtonItem = item
                 textView.hidesBottomBarWhenPushed = true
                 self.navigationController?.pushViewController(textView, animated: true)
                 

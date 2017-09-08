@@ -10,17 +10,21 @@
 			<string>金毛</string>
 			<string>秋田犬</string>
 			<string>阿拉斯加雪撬犬</string>
+			<string>哈士奇</string>
 			<string>米格鲁</string>
 			<string>比熊</string>
+			<string>拉布拉多</string>
 			<string>泰迪</string>
 			<string>吉娃娃</string>
 			<string>沙皮</string>
 			<string>松狮</string>
 			<string>雪纳瑞</string>
+			<string>边境牧羊犬</string>
 			<string>蝴蝶犬</string>
 			<string>京巴</string>
 			<string>博美</string>
 			<string>萨摩耶</string>
+			<string>其他</string>
 		</array>
 		<key>specie</key>
 		<string>狗</string>
@@ -28,7 +32,15 @@
 	<dict>
 		<key>breed</key>
 		<array>
+			<string>串串</string>
+			<string>中华田园猫</string>
+			<string>英国短毛猫</string>
+			<string>暹罗猫</string>
+			<string>美国短毛猫</string>
+			<string>布偶猫</string>
 			<string>波斯猫</string>
+			<string>美国卷耳猫</string>
+			<string>其他</string>
 		</array>
 		<key>specie</key>
 		<string>猫</string>

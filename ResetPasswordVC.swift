@@ -25,8 +25,7 @@ class ResetPasswordVC: UIViewController, UITextFieldDelegate {
         self.view.isUserInteractionEnabled = true
         self.view.addGestureRecognizer(hideTap)
         
-
-        
+        resetBtn.setTitle("重置", for: .normal)
     }
     //click reset button
     @IBAction func resetBtn_click(_ sender: Any) {
@@ -36,8 +35,7 @@ class ResetPasswordVC: UIViewController, UITextFieldDelegate {
         
         //email is invalid
     if !validateEmail(candidate: emailTxt.text!) {
-            alert("请输入", "有效的邮箱")
-        
+        JJHUD.showText(text: "请输入有效的邮箱", delay: 1.25, enable: false)
         
         }else {
             
@@ -47,7 +45,7 @@ class ResetPasswordVC: UIViewController, UITextFieldDelegate {
             if success {
                                     
                 //show alert
-                let alert = UIAlertController(title: "邮件", message: "已发送至您的邮箱", preferredStyle: UIAlertControllerStyle.alert)
+                let alert = UIAlertController(title: "邮件已发送至您的邮箱", message: "请查收来自no-reply@back4app.com的邮件", preferredStyle: UIAlertControllerStyle.alert)
                                     
                 //if pressed ok call self.dismiss() function
                 let ok = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: {(action: UIAlertAction) in
@@ -62,9 +60,10 @@ class ResetPasswordVC: UIViewController, UITextFieldDelegate {
                                     
                 
                 if error!.localizedDescription == "Email address format is invalid." {
-                    self.alert("请输入", "有效的邮箱地址")
+                    JJHUD.showText(text: "请输入有效的邮箱", delay: 1.25, enable: false)
                 } else if error!.localizedDescription.contains("No user found with email") {
-                    self.alert("请输入正确的邮箱", "\(self.emailTxt.text!)未与任何用户名关联")
+                    JJHUD.showText(text: "邮箱地址不正确", delay: 1.25, enable: false)
+                    //self.alert("请输入正确的邮箱", "\(self.emailTxt.text!)未与任何用户名关联")
                 }
                 
             }
@@ -118,7 +117,7 @@ class ResetPasswordVC: UIViewController, UITextFieldDelegate {
     }
     
     
-   
+   /*
     
     func alert(_ titleMessage: String, _ alertMessage: String) {
         let alert = UIAlertController(title: titleMessage, message: alertMessage, preferredStyle: UIAlertControllerStyle.alert)
@@ -128,6 +127,7 @@ class ResetPasswordVC: UIViewController, UITextFieldDelegate {
             self.presentedViewController?.dismiss(animated: false, completion: nil)
         }
     }
+ */
     
     //hide keyboard if tapped
     func hideKeyboardTap (recognizer: UITapGestureRecognizer) {

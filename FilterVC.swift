@@ -43,12 +43,14 @@ class FilterVC: UIViewController, LocationSelectorDelegate , BreedSelectorDelega
     
     
     func changeButtonColor(_ sender: UIButton) {
-        if (sender.backgroundColor == .white) {
+        if (sender.backgroundColor == .darkGray) {
             
-            sender.backgroundColor = .clear
+            sender.backgroundColor = .white
+            sender.setTitleColor(.darkGray, for: .normal)
             
         } else {
-            sender.backgroundColor = .white
+            sender.backgroundColor = .darkGray
+            sender.setTitleColor(.white, for: .normal)
             
         }
     
@@ -67,51 +69,107 @@ class FilterVC: UIViewController, LocationSelectorDelegate , BreedSelectorDelega
         if location == "" || location == "不限" {
             location = "点我选择..."
         }
-        
         locationLbl.text = location
         if location != "点我选择..." {
             locationLbl.textColor = .black
         }
-        breedLbl.text = breedtxt == "" ? "点我选择..." : breedtxt
-        if breedtxt != "" {
+        
+        if breedtxt == "" || breedtxt == "不限" {
+            breedtxt = "点我选择..."
+        }
+        breedLbl.text = breedtxt
+        
+        if breedtxt != "点我选择..." {
             breedLbl.textColor = .black
         }
 
         
         for gender in genderFilter {
             if gender == "公" {
-                genderBtn[0].backgroundColor = .white
+                genderBtn[0].backgroundColor = .darkGray
+                genderBtn[0].setTitleColor(.white, for: .normal)
             }
             if gender == "母" {
-                genderBtn[1].backgroundColor = .white
+                genderBtn[1].backgroundColor = .darkGray
+                genderBtn[1].setTitleColor(.white, for: .normal)
+
             }
         
         }
         
          for age in ageFilter {
-         
-         if age == "幼年" {ageBtn[0].backgroundColor = .white}
-         if age == "成年" {ageBtn[1].backgroundColor = .white}
-         if age == "老年" {ageBtn[2].backgroundColor = .white}
+            if age == "幼年" {
+                ageBtn[0].backgroundColor = .darkGray
+                ageBtn[0].setTitleColor(.white, for: .normal)
+            }
+            if age == "成年" {
+                ageBtn[1].backgroundColor = .darkGray
+                ageBtn[1].setTitleColor(.white, for: .normal)
+
+            }
+            if age == "老年" {
+                ageBtn[2].backgroundColor = .darkGray
+                ageBtn[2].setTitleColor(.white, for: .normal)
+
+            }
          
          }
          
          for age in sizeFilter {
-         if age == "迷你" {sizeBtn[0].backgroundColor = .white}
-         if age == "小型" {sizeBtn[1].backgroundColor = .white}
-         if age == "中型" {sizeBtn[2].backgroundColor = .white}
-         if age == "大型" {sizeBtn[3].backgroundColor = .white}
+            if age == "迷你" {
+                sizeBtn[0].backgroundColor = .darkGray
+                sizeBtn[0].setTitleColor(.white, for: .normal)
+
+            }
+            if age == "小型" {
+                sizeBtn[1].backgroundColor = .darkGray
+                sizeBtn[1].setTitleColor(.white, for: .normal)
+
+            }
+            if age == "中型" {
+                sizeBtn[2].backgroundColor = .darkGray
+                sizeBtn[2].setTitleColor(.white, for: .normal)
+
+            }
+            if age == "大型" {
+                sizeBtn[3].backgroundColor = .darkGray
+                sizeBtn[3].setTitleColor(.white, for: .normal)
+
+            }
          
          }
          
          
         for color in colorFilter {
-             if color == "黑" {colorBtn[0].backgroundColor = .white}
-             if color == "白" {colorBtn[1].backgroundColor = .white}
-             if color == "花" {colorBtn[2].backgroundColor = .white}
-             if color == "棕" {colorBtn[3].backgroundColor = .white}
-             if color == "黄" {colorBtn[4].backgroundColor = .white}
-             if color == "其他" {colorBtn[5].backgroundColor = .white}
+            if color == "黑" {
+                colorBtn[0].backgroundColor = .darkGray
+                colorBtn[0].setTitleColor(.white, for: .normal)
+            }
+             if color == "白" {
+                colorBtn[1].backgroundColor = .darkGray
+                colorBtn[1].setTitleColor(.white, for: .normal)
+
+            }
+             if color == "花" {
+                colorBtn[2].backgroundColor = .darkGray
+                colorBtn[2].setTitleColor(.white, for: .normal)
+
+            }
+             if color == "棕" {
+                colorBtn[3].backgroundColor = .darkGray
+                colorBtn[3].setTitleColor(.white, for: .normal)
+
+            }
+            if color == "黄" {
+                colorBtn[4].backgroundColor = .darkGray
+                colorBtn[4].setTitleColor(.white, for: .normal)
+
+            }
+            if color == "其他" {
+                colorBtn[5].backgroundColor = .darkGray
+                colorBtn[5].setTitleColor(.white, for: .normal)
+
+            }
          
         }
          
@@ -151,14 +209,14 @@ class FilterVC: UIViewController, LocationSelectorDelegate , BreedSelectorDelega
         location = ""
         
         for button in genderBtn {
-            if button.backgroundColor == .white {
+            if button.backgroundColor == .darkGray {
                 if button.tag == 0 {genderFilter.append("公")}
                 else if button.tag == 1 {genderFilter.append("母")}
             }
         }
         
         for button in ageBtn {
-            if button.backgroundColor == .white {
+            if button.backgroundColor == .darkGray {
                 if button.tag == 0 {ageFilter.append("幼年")}
                 else if button.tag == 1 {ageFilter.append("成年")}
                 else if button.tag == 2 {ageFilter.append("老年")}
@@ -166,7 +224,7 @@ class FilterVC: UIViewController, LocationSelectorDelegate , BreedSelectorDelega
         }
 
         for button in sizeBtn {
-            if button.backgroundColor == .white {
+            if button.backgroundColor == .darkGray {
                 if button.tag == 0 {sizeFilter.append("迷你")}
                 else if button.tag == 1 {sizeFilter.append("小型")}
                 else if button.tag == 2 {sizeFilter.append("中型")}
@@ -176,7 +234,7 @@ class FilterVC: UIViewController, LocationSelectorDelegate , BreedSelectorDelega
         }
 
         for button in colorBtn {
-            if button.backgroundColor == .white {
+            if button.backgroundColor == .darkGray {
                 if button.tag == 0 {colorFilter.append("黑")}
                 else if button.tag == 1 {colorFilter.append("白")}
                 else if button.tag == 2 {colorFilter.append("花")}
@@ -210,18 +268,18 @@ class FilterVC: UIViewController, LocationSelectorDelegate , BreedSelectorDelega
     func setDefaultbuttons(_ buttons: [UIButton]){
     
         for button in buttons {
-            //button.backgroundColor = .clear
             button.layer.borderWidth = 1
             button.layer.borderColor = UIColor.darkGray.cgColor
+            button.setTitleColor(.darkGray, for: .normal)
             
         }
     }
     
     
     func selectLocation() {
-    let locationSelector = LocationSelector()
-    locationSelector.delegate = self;
-    self.navigationController?.pushViewController(locationSelector, animated: true)
+        let locationSelector = LocationSelector("filter")
+        locationSelector.delegate = self;
+        self.navigationController?.pushViewController(locationSelector, animated: true)
     }
 
    
@@ -251,11 +309,8 @@ class FilterVC: UIViewController, LocationSelectorDelegate , BreedSelectorDelega
         }
         
         if selectedBreeds != "点我选择..." {
-
             breedLbl.textColor = .black
-
         }
-        print(selectedBreeds)
         breedLbl.text = selectedBreeds.trimmingCharacters(in: NSCharacterSet.newlines)
         breedtxt = selectedBreeds.trimmingCharacters(in: NSCharacterSet.newlines)
         self.navigationController?.popToViewController(self, animated: true)

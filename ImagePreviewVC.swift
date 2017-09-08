@@ -106,9 +106,7 @@ class ImagePreviewVC: UIViewController {
 extension ImagePreviewVC:UICollectionViewDelegate,UICollectionViewDataSource{
     
     //collectionView单元格创建
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath)
-        -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell",
                                             for: indexPath) as! ImagePreviewCell
 
@@ -123,15 +121,12 @@ extension ImagePreviewVC:UICollectionViewDelegate,UICollectionViewDataSource{
     }
     
     //collectionView单元格数量
-    func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.images.count
     }
     
     //collectionView将要显示
-    func collectionView(_ collectionView: UICollectionView,
-                        willDisplay cell: UICollectionViewCell,
-                        forItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let cell = cell as? ImagePreviewCell{
             //由于单元格是复用的，所以要重置内部元素尺寸
             cell.resetSize()

@@ -196,14 +196,6 @@ class SignUpVC: UIViewController, UITextFieldDelegate {
             self.signupBtn.isEnabled = false
         }
         
-        
-        
-       // if string.characters.count == 0 {
-            // Returning yes here to allow entry of backspace
-          //  return true
-       // }
-        
-        
        
         let characterCountLimit: Int = 10
         

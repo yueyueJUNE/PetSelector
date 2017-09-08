@@ -36,8 +36,9 @@ class UserHeaderView: UIView {
                     self.button.setTitle("已关注", for: UIControlState.normal)
                     self.button.layer.borderColor = UIColor.white.cgColor
                     self.button.setTitleColor(.white, for: UIControlState())
-                    
                     self.followers.setTitle("\(Int(self.followers.title(for: UIControlState())!)! + 1)", for: .normal)
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshFollow"), object: nil)
+
                 } else {
                     print(error!.localizedDescription)
                 }
@@ -59,6 +60,8 @@ class UserHeaderView: UIView {
                                         self.button.layer.borderColor = UIColor.lightGray.cgColor
                                         self.button.setTitleColor(.lightGray, for: UIControlState())
                                         self.followers.setTitle("\(Int(self.followers.title(for: UIControlState())!)! - 1)", for: .normal)
+                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshFollow"), object: nil)
+
                                     } else {
                                         print(error!.localizedDescription)
                                     }
@@ -132,7 +135,7 @@ class UserHeaderView: UIView {
             backgroundView.addGestureRecognizer(backgroundviewTap)
             
         } else {
-           followers.isUserInteractionEnabled = false
+            followers.isUserInteractionEnabled = false
             followees.isUserInteractionEnabled = false
             
        }
@@ -145,84 +148,12 @@ class UserHeaderView: UIView {
     func backgroundImageTaped(sender: UITapGestureRecognizer) {
         
         delegate?.showChangeImageVC("background")
-        /*
-        let image = backgroundImage.image
-        let window = UIApplication.shared.keyWindow
-        let background = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
-        background.backgroundColor = UIColor.black
-        background.alpha = 0
-        
-        let imageView = UIImageView()
-        imageView.frame = backgroundImage.frame
-        imageView.image = image
-        imageView.tag = 2
-        background.addSubview(imageView)
-        window?.addSubview(background)
-        
-        let hide = UITapGestureRecognizer(target: self, action: #selector(hidebackgroundImage))
-        imageView.isUserInteractionEnabled = true
-        imageView.addGestureRecognizer(hide)
-        UIView.animate(withDuration: 0.3, animations:{ () in
-            imageView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
-            
-            imageView.contentMode = .scaleAspectFit
-            background.alpha = 1
-        }, completion: {(finished:Bool) in })
- 
-    */
-
     }
     
-    /*
-    func hidebackgroundImage(sender: UITapGestureRecognizer) {
-        let background = sender.view as UIView?
-        if let view = background {
-            UIView.animate(withDuration: 0.3, animations:{ () in
-                let imageView = view.viewWithTag(2) as! UIImageView
-                imageView.frame = self.backgroundImage.frame
-                imageView.alpha = 0
-                
-            },completion: {(finished:Bool) in
-                view.alpha = 0
-                view.superview?.removeFromSuperview()
-                view.removeFromSuperview()
-            })
-        }
-    }
-
-    */
+    
     func showavaImage(sender: UITapGestureRecognizer) {
         
         delegate?.showChangeImageVC("ava")
-        /*
-        let image = avaImg.image
-        let window = UIApplication.shared.keyWindow
-        let background = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
-        background.backgroundColor = UIColor.groupTableViewBackground
-        background.alpha = 0
-        
-        let imageView = UIImageView()
-        imageView.frame = avaImg.frame
-        imageView.image = image
-        imageView.tag = 1
-        background.addSubview(imageView)
-        window?.addSubview(background)
-        
-        let hide = UITapGestureRecognizer(target: self, action: #selector(hideavaImage))
-        imageView.isUserInteractionEnabled = true
-        imageView.addGestureRecognizer(hide)
-        UIView.animate(withDuration: 0.3, animations:{ () in
-            //let vsize = UIScreen.main.bounds.size
-            //imageView.frame = CGRect(x:0.0, y: 0.0, width: vsize.width, height: vsize.height)
-            imageView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
-
-            imageView.contentMode = .scaleAspectFit
-            background.alpha = 1
-        }, completion: {(finished:Bool) in })
- 
- 
-         */
-        
     }
     
     func hideavaImage(sender: UITapGestureRecognizer) {

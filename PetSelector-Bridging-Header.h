@@ -9,8 +9,6 @@
 
 #import "SRActionSheet.h"
 
-
-
 #import <ShareSDK/ShareSDK.h>
 #import <ShareSDKUI/ShareSDK+SSUI.h>
 #import <ShareSDKUI/SSUIShareActionSheetStyle.h>
@@ -25,4 +23,4 @@
 #import "STPickerDate.h"
 #import "STPickerArea.h"
 
-#import "UITextView+PlaceHolder.h"
+//#import "UITextView+PlaceHolder.h"

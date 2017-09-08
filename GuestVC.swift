@@ -46,14 +46,11 @@ class GuestVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuV
     var scrollHorizY: CGFloat = 0
     var scrollY:CGFloat = 0// 记录当偏移量
     var scrollX:CGFloat = 0// 记录当偏移量
+    
+    //var type: String!
+
 
     override func viewWillAppear(_ animated: Bool) {
-        // didAppear隐藏,不会让整个页面向上移动64
-        //self.navigationController?.navigationBar.subviews.first?.alpha = 0
-        //hiddenNav(true)
-        
-       // (self.tabBarController as! TabBarVC).postBtn.isHidden = self.hidesBottomBarWhenPushed
-       // (self.tabBarController as! TabBarVC).view.bringSubview(toFront: (self.tabBarController as! TabBarVC).postBtn)
         
         self.navigationController?.navigationBar.subviews.first?.alpha = CGFloat(viewAppearAlpa)
         hiddenNav(hideNav)
@@ -63,9 +60,11 @@ class GuestVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuV
   
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(resetimImage), name: Notification.Name(rawValue: "uploadImageSuccess"), object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: NSNotification.Name(rawValue: "refresh"), object: nil)
+        if userID.last == PFUser.current()?.objectId {
+            NotificationCenter.default.addObserver(self, selector: #selector(resetimImage), name: Notification.Name(rawValue: "uploadImageSuccess"), object: nil)
+            NotificationCenter.default.addObserver(self, selector: #selector(refresh), name: NSNotification.Name(rawValue: "refresh"), object: nil)
+        }
        
         //new back button
         let backBtn = UIBarButtonItem(image: #imageLiteral(resourceName: "back"), style: .plain, target: self, action: #selector(back))
@@ -100,12 +99,10 @@ class GuestVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuV
             self.navigationController?.pushViewController(settingVC, animated: true)
         
         }
-
     }
     
-    var type: String!
     func showChangeImageVC(_ type: String) {
-        self.type = type
+        //self.type = type
         
         let changeImageVC = self.storyboard!.instantiateViewController(withIdentifier: "changeImageVC") as! changeImageVC
         
@@ -116,20 +113,17 @@ class GuestVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuV
             NotificationCenter.default.post(name: Notification.Name(rawValue: "showImage"), object: nil, userInfo:["type": type,"image": headerView.avaImg.image!])
         } else {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "showImage"), object: nil, userInfo:["type": type,"image": headerView.backgroundImage.image!])
-            
         }
     }
     
     
     func resetimImage(_ notification: Notification) {
-        
+        let type = notification.userInfo?["type"] as! String
         if type == "ava" {
             headerView.avaImg.image! = notification.userInfo?["image"] as! UIImage
         } else {
             headerView.backgroundImage.image! = notification.userInfo?["image"] as! UIImage
-            
         }
-        
     }
  
     
@@ -168,7 +162,7 @@ class GuestVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuV
         query?.whereKey("objectId", equalTo: userID.last!)
         query?.getFirstObjectInBackground(block: { (object, error) in
             self.navigationItem.title = (object?.value(forKey: "username") as! String)
-            //self.navigationController?.navigationBar.topItem?.title = (object?.value(forKey: "username") as! String)
+            
         })
     }
     
@@ -224,16 +218,7 @@ class GuestVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuV
         self.view.addSubview(self.menuView)
     }
     
-    /*
-    //创建MenuView
-    func layoutMenuView() {
-        // MenuView
-        menuView = ZEMenuView(frame:CGRect(x: 0,y: headerHeight,width: screenWidth,height: menuHeight))
-        menuView.delegate = self
-        menuView.setUIWithArr(titlesArr)
-        self.view.addSubview(self.menuView)
-    }
-    */
+  
     //因为频繁用到header和menu的固定
     func headerMenuViewShowType(_ showType:headerMenuShowType){
         switch showType {
@@ -261,7 +246,6 @@ class GuestVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuV
         // make references to followersVC
         let followings = self.storyboard?.instantiateViewController(withIdentifier: "FollowerVC") as! FollowerVC
         followings.hidesBottomBarWhenPushed = true
-
         // present
         self.navigationController?.pushViewController(followings, animated: true)
         
@@ -283,14 +267,8 @@ class GuestVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuV
             hideNav = true
             headerMenuViewShowType(.buttom)
         }else{
-            // 剩下的只有需要跟随的情况了
             // 将headerView的y值按照偏移量更改
-            
-           // if seleoffSetY<0 {
-            //    headerView.frame.origin.y -= 0
-            //} else {
-                headerView.frame.origin.y -= seleoffSetY
-            //}
+            headerView.frame.origin.y -= seleoffSetY
             menuView.frame.origin.y = headerView.frame.maxY
             // 基准线 用于当做计算0-1的..被除数..分母...
             let datumLine = -menuHeight-navigationHeight + scrollHorizY
@@ -401,12 +379,12 @@ class GuestVC: UIViewController,UIScrollViewDelegate,UserTableVCDelegate,ZEMenuV
         
         if hidden {
             self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
-            UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
+            //UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
             self.navigationController?.navigationBar.tintColor = .white
 
         }else{
             self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.black]
-            UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
+            //UIApplication.shared.statusBarStyle = UIStatusBarStyle.default
             self.navigationController?.navigationBar.tintColor = .darkGray
 
             

@@ -10,7 +10,6 @@ protocol UserTableVCDelegate{
 
 }
 
-
 class UserTableVC: UITableViewController {
     
     var delegate:UserTableVCDelegate?
@@ -19,7 +18,7 @@ class UserTableVC: UITableViewController {
     var styles: UITableViewStyle?
     
     // page size
-    var page: Int! = 10
+    var page: Int! = 20
     //arrays to hold info from server
     var petavaArray = [PFFile]()
     var petnameArray = [String]()
@@ -56,17 +55,6 @@ class UserTableVC: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-
-    override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(animated)
-
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.tableFooterView = UIView()
@@ -80,10 +68,7 @@ class UserTableVC: UITableViewController {
         setupHeader()
         setupFooter()
     }
-    
-    
-    
-    
+
     func setHeaderView() {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width:
             self.view.frame.size.width, height: 25))
@@ -124,9 +109,7 @@ class UserTableVC: UITableViewController {
                     titleLabel.text = "\(count)条"
                 }
             })
-        
         }
-
         headerView.addSubview(titleLabel)
         self.tableView.tableHeaderView = headerView
 
@@ -354,7 +337,6 @@ class UserTableVC: UITableViewController {
                 query.whereKey("adopted", equalTo: true)
             }
             self.runQuery(query, endfreshType)
-
         }
  
     }
@@ -385,13 +367,13 @@ class UserTableVC: UITableViewController {
                     notFoundLbl.frame.size = CGSize(width: view.frame.size.width, height: view.frame.size.height)
                     notFoundLbl.center = view.center
                     notFoundLbl.text = "没有搜索结果"
+                    notFoundLbl.textColor = .gray
                     notFoundLbl.font = UIFont.systemFont(ofSize: 19)
                     notFoundLbl.textAlignment = .center
                     view.addSubview(notFoundLbl)
                     self.tableView.tableFooterView = view
                     self.offset = self.tableView.contentOffset
                     self.tableView.reloadData()
-                    
                     self.endRefreshByType(endfreshType)
                     
                 } else {
@@ -431,16 +413,12 @@ class UserTableVC: UITableViewController {
             } else {
                 
                 if error!.localizedDescription == "似乎已断开与互联网的连接。" || error!.localizedDescription == "Network connection failed." || error!.localizedDescription == "The Internet connection appears to be offline."{
-                    let alert = UIAlertController(title: "网络问题", message: "似乎已断开与互联网的连接。", preferredStyle: UIAlertControllerStyle.alert)
-                    let ok = UIAlertAction(title: "确定", style: UIAlertActionStyle.cancel, handler: nil)
-                    alert.addAction(ok)
-                    self.present(alert, animated: true, completion: nil)
-                    
+                   
+                    JJHUD.showInfo(text: "已与网络断开连接", delay: 1.25, enable: false)
                     
                 }
             }
         })
-    
     }
 
     
@@ -559,7 +537,6 @@ class UserTableVC: UITableViewController {
             cell.likeLbl.isHidden = true
         }
         
-        
         return cell
     }
 
@@ -603,7 +580,7 @@ class UserTableVC: UITableViewController {
     func footerRefresh() {
 
         if page <= petIDArray.count {
-            page = page + 10
+            page = page + 20
             loadPets(.endFooter)
         } else {
             self.refreshFooter?.endRefreshing()

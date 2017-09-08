@@ -24,17 +24,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //configuration of using parse
         let parseConfig = ParseClientConfiguration { (ParseMutableClientConfiguration) in
             //accesing back4app app via id and keys
-            ParseMutableClientConfiguration.applicationId = "VFKAGAjGg9BgWHcImt2SR3WnbrhIzGSfuso1EHQp"
-            ParseMutableClientConfiguration.clientKey = "oMkgcvtm2LFfjbbpIScj16Or0xUyf62YGcGA35bV"
+            
+            /*
+            ParseMutableClientConfiguration.applicationId = "VNhp1vvxPicoJKgjX5OG8Z5fY1XMK0yChsS9fuk2"
+            ParseMutableClientConfiguration.clientKey = "MgKbZ4nNR3dCybtLRYigmrL35S3MleCaVTvo1Dqy"
+             */
+            
+            ParseMutableClientConfiguration.applicationId = "VNhp1vvxPicoJKgjX5OG8Z5fY1XMK0yChsS9fuk2"
+            ParseMutableClientConfiguration.clientKey = "MgKbZ4nNR3dCybtLRYigmrL35S3MleCaVTvo1Dqy"
             ParseMutableClientConfiguration.server = "https://parseapi.back4app.com/"
         }
         
         Parse.initialize(with: parseConfig)
         //call log in function
         //login()
-        
-       
-        
         
         ShareSDK.registerActivePlatforms([SSDKPlatformType.typeSinaWeibo.rawValue, SSDKPlatformType.typeWechat.rawValue],
             onImport: { (platform) in
@@ -67,13 +70,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             default:
                 break
             }
-            
-            
-            
                         
         })
-        
-     
         
         let storyboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let myTapbBar = storyboard.instantiateViewController(withIdentifier: "TabBarVC") as! TabBarVC
